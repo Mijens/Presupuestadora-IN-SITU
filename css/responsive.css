@@ -1,0 +1,155 @@
+
+@media (max-width: 1024px) {
+  .configuracion-seccion {
+    width: 95%;
+    padding: 1.5rem 0.75rem;
+  }
+  
+  #imagenPiezas {
+    max-width: 500px;
+    min-height: 250px;
+  }
+  
+  .configuracion-titulo {
+    padding-bottom: 1.5rem;
+  }
+}
+@media (max-width: 420px) {
+  #imagenPiezas canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+/* Móviles grandes */
+@media (max-width: 768px) {
+  .titulo-solicitud{
+      padding: 0px 15px;
+  }
+  section{
+      padding: 0px 10px;
+    }
+  .configuracion-seccion {
+    width: 100%;
+    padding: 1rem 0.5rem;
+    min-height: 250px;
+  }
+  
+  #imagenPiezas {
+    max-width: 100%;
+    min-height: 200px;
+    margin: 20px auto;
+  }
+  
+  #ancho,
+  #profundidad {
+    font-size: 14px;
+    padding: 1px 4px;
+  }
+  
+  #disclaimerConfig {
+    font-size: 14px;
+  }
+  
+  /* Ajuste de flechas en cotas para móvil */
+  #lineaAncho::before, #lineaAncho::after,
+  #lineaProfundidad::before, #lineaProfundidad::after {
+    border-width: 4px;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .configuracion-seccion {
+    padding: 0.75rem 0.25rem;
+    min-height: 200px;
+  }
+  
+  #imagenPiezas {
+    min-height: 180px;
+    margin: 15px auto;
+  }
+  
+  #ancho,
+  #profundidad {
+    font-size: 12px;
+    padding: 1px 3px;
+  }
+  
+  #disclaimerConfig {
+    font-size: 12px;
+    padding: 0 10px;
+  }
+  
+  .configuracion-titulo {
+    font-size: 16px;
+    padding-bottom: 1rem;
+  }
+}
+
+/* Pantallas extra pequeñas */
+@media (max-width: 360px) {
+  #imagenPiezas {
+    min-height: 150px;
+  }
+  
+  #ancho,
+  #profundidad {
+    font-size: 11px;
+  }
+}
+
+/* Orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+  .configuracion-seccion {
+    min-height: 150px;
+  }
+  
+  #imagenPiezas {
+    min-height: 120px;
+    margin: 10px auto;
+  }
+}
+
+/* --- Imagen de referencia de tela responsive --- */
+#telaReferencia img,
+.img-referencia-tela img {
+
+height: auto;
+object-fit: contain;
+max-width: 250px;
+display: block;
+margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+#telaReferencia img,
+.img-referencia-tela img {
+  max-width: 180px;
+}
+}
+/* Ajuste responsive para el área de configuración */
+#imagenPiezas {
+position: relative;
+width: 100%;
+max-width: 100%;
+aspect-ratio: 3 / 2;
+height: auto !important;
+overflow: visible;
+margin-top: 30px !important; 
+margin: 0 auto;
+}
+
+#imagenPiezas canvas {
+width: 100% !important;
+height: fit-content !important;
+max-width: 100%;
+display: block;
+}
+
+@media (max-width: 600px) {
+#imagenPiezas {
+
+  aspect-ratio: 4 / 3;
+  min-height: 180px;
+}
+}

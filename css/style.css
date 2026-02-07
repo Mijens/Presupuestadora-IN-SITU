@@ -1,0 +1,981 @@
+.Montserrat_SemiBold-titulos {
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  font-weight: 600; /* SemiBold */
+}
+.Montserrat-mid-titulos {
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600; /* SemiBold */
+}
+.Montserrat-resumen {
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400; /* Regular */
+}
+.Montserrat-subtitulos {
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+.Montserrat-soporte {
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+}
+.Montserrat-chica {
+  font-family: "Montserrat", sans-serif;
+  font-size: 10px;
+  font-weight: 300; /* Light */
+}
+:root{
+  --brand:#abd1f5;
+}
+*{
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  display: flex;
+  overflow-x: hidden;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+/*HEADER*/
+header {
+  background-color: var(--brand);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+header img {
+  width: 165px;
+}
+
+.titulo-solicitud {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  padding-top: 2.3rem;
+}
+.titulo-solicitud h1,
+.titulo-solicitud p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+h1 {
+  color: #343434;
+}
+h2 {
+  color: #000000;
+}
+p {
+  color: #808080;
+}
+.seccion-titulo {
+  color: #343434;
+}
+.configuracion-titulo {
+  padding-bottom: 2rem;
+  align-self: flex-start;
+  width: 100%;
+}
+
+/*DIV IMG REFERENCIAS*/
+.div-referencia {
+  padding-top: 0rem;
+}
+.tela-div-h.hidden { display: none !important; }
+.tela-div-h.active { display: flex; }
+.referencia-img {
+  margin-top: 0rem;
+  border-radius: 0rem;
+  width: 65%;
+  height: auto;
+}
+.inner-telas{
+  padding-top: 20px;
+  height: 40px;
+  margin-bottom: 35px;
+  gap: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.img-tela {
+  padding-top: 50px;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+.img-tela img {
+  width: 10%;
+}
+/*FORM DATOS*/
+
+.form-inputs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  justify-content: center;
+  margin: auto;
+}
+.top-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: #a5a5a5 1px solid;
+  padding: 0.5rem 5px;
+  cursor: pointer;
+}
+.ipts{
+  padding-bottom: 0px !important;
+  margin-bottom: 5px !important;
+}
+.input-title {
+  color: #343434;
+  padding-top: 1rem;
+}
+input {
+  display: flex;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: #a5a5a5 1px solid;
+  border-radius: 0px;
+  font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  outline: 2px solid #343434;
+  outline-offset: 2px;
+}
+
+input[type="text"]::placeholder {
+  color: #999;
+}
+.paddingbt{
+  padding-bottom: 25px !important;
+  
+  border-bottom: #343434 1px solid !important;
+}
+.dropdown {
+  padding-top: 1rem;
+  border: #a5a5a5 1px solid;
+  cursor: pointer;
+}
+#seccionCojines{
+  margin-top: 12px;
+}
+.cojines-div{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.cojin-descripcion {
+  color: #000;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+/* Make cojines dropdown wider and taller - completamente clickeable */
+#cojines {
+  width: 100% !important;
+  max-width: 100%;
+  min-height: 45px;
+  height: auto;
+  font-size: 14px; /* Tamaño de fuente pequeño */
+  padding: 12px 40px 12px 15px; /* Más padding a la derecha para la flecha */
+  border-radius: 0px;
+  border: #a5a5a5 1px solid;
+  cursor: pointer;
+  background-color: white;
+  appearance: none; /* Eliminar estilos por defecto del navegador */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
+}
+
+#cojines:focus {
+  outline: 2px solid #343434;
+  outline-offset: 2px;
+}
+
+#cojines:focus {
+  outline: 2px solid #343434;
+  outline-offset: 2px;
+}
+
+.suma-cojin p.sum {
+  font-size: 18px;
+  font-weight: bold;
+  min-width: 24px;
+  text-align: center;
+  margin: 0;
+}
+
+.suma-cojin button svg {
+  color: #333;
+  pointer-events: none;
+}
+.suma-cojin button{
+  color: white;
+  font-size: 12px;
+  width: 15px;
+  height: auto;
+}
+option,
+select {
+  cursor: pointer;
+}
+section{
+  width: 100% !important;
+  max-width: 750px !important;
+}
+/*SECCION PIEZAS*/
+.pieza-seccion {
+  display: flex;
+  flex-direction: column;
+}
+.contacto-seccion{
+  width: 100% !important;
+  max-width: 750px !important;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+.end-seccion{
+  width: 100% !important;
+  max-width: 750px !important;
+  padding-bottom: 25px;
+  padding-top: 25px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+
+.pieza-seccion,
+.modelo-seccion {
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+  margin-bottom: 20px;
+  border-bottom: #343434 1px solid;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+.tela-seccion {
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+  margin-bottom: 20px;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+/*---------PIEZAS ESCONDIDAS-------*/
+.hidden {
+  display: none;
+}
+/*COJINES*/
+.a-cojines {
+  padding-top: 1.5rem;
+  color: #343434;
+}
+
+.suplementoPatas {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+.input-cojines {
+  margin-bottom: 1rem;
+}
+/*------------SUPLEMENTOS--------*/
+.suplemento-bateria,
+.suplemento-motor,
+.suplementoPatas,
+.suplemento-respaldos,
+.seccion-posapies {
+  display: none;
+}
+
+/*------------SUPLEMENTO AGORA------------*/
+.suplemento-agora {
+  width: 100%;
+  display: block;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+.dropdown-agora {
+  padding-top: 1rem;
+  border: #a5a5a5 1px solid;
+  cursor: pointer;
+}
+/* SECCION CONFIGURACION Y RESUMEN */
+.configuracion-seccion {
+  align-items: center;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+  width: 60%;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+/* ========================================
+   ESTILOS RESPONSIVE PARA CONFIGURACIÓN
+   ======================================== */
+
+/* Contenedor principal responsive */
+.configuracion-seccion {
+  align-items: center;
+  padding: 2rem 1rem;
+  width: 100%;
+  max-width: 90%;
+  height: auto;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+/* Contenedor de imágenes responsive */
+#imagenPiezas {
+  object-fit: contain;
+  margin: 30px auto;
+  position: relative;
+  display: block;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  min-height: 300px;
+  aspect-ratio: 3/2;
+  overflow: visible;
+  transition: all 0.3s ease;
+}
+
+.img-config {
+  object-fit: fill !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: block;
+  margin: 0 !important;
+  padding: 0;
+  border: none !important;
+  outline: none !important;
+  transform-origin: center;
+  position: absolute;
+  transition: all 0.3s ease;
+}
+.profundidad {
+  position: absolute;
+  right: 20%;
+}
+#lineaProfundidad {
+  position: absolute;
+  left: 120%;
+}
+.div-configuracion-resumen {
+  display: flex;
+  flex-direction: row;
+}
+
+.div-configuracion-img {
+  flex: 2;
+}
+
+/* ========================================
+   CORRECCIONES PARA SECCIÓN RESUMEN
+   ======================================== */
+
+/*RESUMEN*/
+.section-resumen {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Cambiado de center a flex-start */
+  align-items: flex-start; /* Cambiado de center a flex-start */
+  width: 40%;
+  margin: auto;
+}
+
+/* SECCION CLIENTE */
+.section-cliente {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 40%;
+  margin: auto;
+  border-top: #343434 1px solid;
+}
+
+/* Título RESUMEN alineado a la izquierda */
+.section-resumen .seccion-titulo {
+  text-align: left;
+  width: 100%;
+  display: block;
+  margin-bottom: 20px;
+  align-self: flex-start; /* Alinear a la izquierda */
+}
+
+.itemsResumen {
+  font-size: 13px;
+}
+/* Estilos para el título del resumen */
+.resumen-a {
+  color: #343434;
+}
+.precioResumen {
+  color: #000000;
+  font-weight: 700;
+}
+.descuento-resumen{
+  font-weight: 900 !important;
+}
+
+/* Estilos para la lista de resumen */
+.ul-config li {
+  display: flex;
+  justify-items: start;
+  padding-bottom: 1.5rem;
+  text-align: left; /* Todo alineado a la izquierda */
+}
+
+/* Caja del resumen con ancho completo y contenido alineado a la izquierda */
+.ul-config {
+  width: 100%; /* Ancho completo hasta la línea divisoria */
+  max-width: 100%; /* Cambiado de 550px a 100% */
+  padding: 2rem;
+  border: 1px solid #343434;
+  border-radius: 0px;
+  color: #808080;
+  list-style: none;
+  display: block;
+  justify-content: flex-start; /* Cambiado de start a flex-start */
+  flex-direction: column;
+  align-items: flex-start; /* Alinear contenido a la izquierda */
+  margin: 0; /* Eliminar márgenes laterales */
+  gap: 1rem;
+  box-sizing: border-box;
+  text-align: left; /* Alinear contenido a la izquierda */
+}
+
+/* Todos los elementos del resumen alineados a la izquierda */
+.ul-config .inter-resumen {
+  text-align: left;
+}
+
+/* Items individuales del resumen alineados a la izquierda */
+.ul-config .itemsResumen {
+  text-align: left;
+  padding-left: 0;
+}
+
+/* Precio total alineado a la izquierda */
+.ul-config .precioResumen {
+  text-align: left;
+  font-weight: bold;
+  font-size: 16px; /* Reducido de tamaño */
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #ccc;
+}
+
+/* Lista interna de piezas sin padding extra */
+.ul-config ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 5px 0;
+}
+
+/* Espaciado consistente para los precios */
+#preciosMaterial,
+#precioCojines {
+  font-weight: 600;
+}
+
+/* Precio total más pequeño */
+#precioTotal {
+  font-weight: 500; /* Reducido a 500 (medium) */
+  font-size: 16px; /* Tamaño reducido */
+}
+
+/*BOTONES*/
+button,
+.btnAlert {
+  color: #000;
+  background-color: transparent;
+  border-radius: 0px;
+  border: 1px solid var(--brand);
+  padding: 1rem 1.5rem;
+  font-size: 16px;
+  font-weight: 400; /* Reducido de bold a normal */
+  transition: all 0.3s ease;
+  box-shadow: none;
+}
+button:hover,
+.btnAlert:hover {
+  cursor: pointer;
+  color: #ffffff;
+  background-color: rgb(102,61,56);
+  box-shadow: none;
+}
+.btn-agregar {
+  display: flex;
+  margin: auto;
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  font-weight: 500; /* Un poquito bold (medium) */
+  width: 200px;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 0px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-agregar:hover {
+  background-color: #000;
+  color: #fff;
+}
+.btn-pdf {
+  margin-top: 25px !important;
+  font-size: 14px;
+  width: 250px;
+  cursor: pointer;
+  display: flex;
+  margin: 15px auto;
+  justify-content: center;
+  align-items: center;
+  transition: 1s;
+}
+.btn-pdf.active {
+  background-color: #c0c0c0;
+  color: white;
+}
+#openModalBtn {
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 0px;
+  width: 250px;
+  padding: 1rem 1.5rem;
+  font-weight: 500; /* Un poquito bold (medium) */
+  transition: all 0.3s ease;
+  display: block;
+  margin: 15px auto; /* Centrado */
+}
+
+#openModalBtn:hover {
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+/*RESUMEN LI*/
+li {
+  color: #000000;
+}
+
+/*DROPDOWN*/
+.teladiv {
+  width: 100%;
+}
+.tela-div-h {
+  padding-top: 2rem;
+  flex-direction: column;
+}
+.telas-image {
+  width: 50px;
+  height: 50px;
+}
+.custom-select {
+  position: relative;
+}
+.dropdown-select {
+  display: flex;
+  width: 100%;
+  padding-top: 1rem;
+  border: #a5a5a5 1px solid;
+  cursor: pointer;
+}
+
+.category-select {
+  margin: 10px 0;
+}
+.selectTelaContainer {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1rem;
+  border: #a5a5a5 1px solid;
+}
+/*---------------------LUPA--------------*/
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 0px;
+  text-align: center;
+  position: relative;
+}
+.overlay-img {
+  width: 10%;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+.search-container {
+  position: relative;
+  width: 300px;
+}
+
+#category-search {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 0px;
+  width: 100%;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 0px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.suggestions-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestions-list li:hover {
+  background-color: #f0f0f0;
+}
+
+.my-title,
+.my-popup,
+.my-text {
+  background-color: white;
+}
+
+.my-confirm-button {
+  width: 100%;
+  display: flex;
+  margin: auto;
+  margin-top: 1.5rem;
+  font-family: "Montserrat-Medium";
+  color: aliceblue;
+  background-color: #d1c2a5;
+  border: none;
+  cursor: pointer;
+  padding: 1rem 1rem 1rem 1rem;
+  border-radius: 0px;
+  transition: 1s;
+}
+/*--------------OVERLAY--------------*/
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow: auto;
+}
+
+/* Contenido del modal de */
+.modal-content {
+  background-color: white;
+  margin: auto;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  max-width: 1000px;
+  overflow-y: auto;
+  border-radius: 0px;
+  position: relative;
+  position: relative;
+  box-sizing: border-box;
+}
+.contacto-seccion h2 {
+  margin-top: 0;
+}
+
+/* Botón para cerrar */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+/*-------SWEET ALERT-----*/
+.popupAlert {
+  display: flex;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0px;
+  border: 1px solid #000000;
+}
+.titleAlert {
+  text-transform: uppercase;
+  font-family: "Montserrat-Medium", sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+}
+.textAlert {
+  font-family: "Montserrat-Light", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 0;
+  display: flex;
+  margin: auto;
+  width: 60%;
+  flex-direction: column;
+  text-align: left;
+}
+/*-------LINEAS COTAS-----*/
+
+#disclaimerConfig {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Montserrat-Light", sans-serif;
+  font-size: clamp(14px, 2.5vw, 16px);
+  font-weight: 600;
+  color: #555;
+  text-align: center;
+  z-index: 10;
+  padding: 0 20px;
+}
+#lineaAncho, #lineaProfundidad, #ancho, #profundidad {
+  display: none;
+}
+#lineaAncho {
+  position: absolute;
+  height: 1px;
+  background: #000;
+  z-index: 5;
+  transition: width 0.25s ease, top 0.25s ease, left 0.25s ease;
+}
+#lineaProfundidad {
+  position: absolute;
+  width: 1px;
+  background: #000;
+  z-index: 5;
+  transition: height 0.25s ease, top 0.25s ease, left 0.25s ease;
+}
+
+/* Círculos en lugar de flechas */
+#lineaAncho::before, #lineaAncho::after,
+#lineaProfundidad::before, #lineaProfundidad::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #000;
+  border-radius: 50%;
+}
+#lineaAncho::before { left: -3px; top: -2.5px; }
+#lineaAncho::after  { right: -3px; top: -2.5px; }
+#lineaProfundidad::before { top: -3px; left: -2.5px; }
+#lineaProfundidad::after  { bottom: -3px; left: -2.5px; }
+
+#ancho,
+#profundidad {
+  position: absolute;
+  font-family: "Montserrat-Light", sans-serif;
+  font-size: clamp(14px, 2vw, 18px);
+  font-weight: 600;
+  color: #000;
+  background: #fff;
+  border: none !important;
+  padding: 2px 6px;
+  border-radius: 6px;
+  z-index: 5;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: font-size 0.3s ease;
+}
+.footer {
+  margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--brand);
+  border-top: 1px solid #e5e5e5;
+  font-family: Montserrat-Light, Arial, sans-serif;
+}
+.top-footer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+.footer-content {
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: start;
+}
+
+.footer-logo {
+  padding-top: 15px;
+  padding-right: 10px;
+  width: 165px;
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.footer-claim {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.footer-column {
+  padding-right: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.5;
+}
+.lower-footer{
+  margin-top: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  gap: 150px;
+}
+.footer-title {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.footer-subinfo {
+  margin-top: 6px;
+}
+
+.footer-legal {
+  max-width: 750px; /* Mismo ancho que las secciones */
+  width: 100%;
+  margin: 0 auto;
+  padding: 8px 12px 14px;
+}
+
+.footer-legal-text {
+  text-align: center;
+  font-size: 10px;
+  color: #666;
+  line-height: 1.4;
+}
+ul{
+  padding-inline-start: 0px;
+
+}
+/* ----------------- AJUSTES ESPACIOS ----------------- */
+
+/* Reducir espacio entre resumen y botón */
+#seccionResumen {
+    margin-bottom: 5px;
+}
+
+#openModalBtn {
+    margin-top: 2px;
+}
+
+/* Separar el footer del botón */
+.footer-legal {
+    margin-top: 25px;
+    padding: 15px;
+}
+
+/* Aplicar Montserrat al resumen */
+.ul-config, .ul-config li, .itemsResumen, .precioResumen {
+  font-family: "Montserrat", sans-serif;
+}

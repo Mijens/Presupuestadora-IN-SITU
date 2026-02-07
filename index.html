@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es" translate="no">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SINGULAR | Presupuesto</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/responsive.css" />
+   <!-- GOOGLE FONTS MONTSERRAT -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!--PIEZA SELECTOR-->
+<section class="pieza-seccion" id="seccionPiezas">
+    <div class="form-inputs">
+        <a class="seccion-titulo Montserrat-mid-titulos"> Piezas</a>
+        <label for="pieza" class="input-title Montserrat-subtitulos">Selecciona las piezas para la configuración*</label>
+
+        <!-- Selección de piezas: MODULOS y RINCÓN -->
+        <select name="pieza" id="pieza1" class="dropdown">
+            <!-- Se llena con JS -->
+        </select>
+        <select name="pieza" id="pieza2" class="dropdown">
+            <!-- Se llena con JS -->
+        </select>
+        <select name="pieza" id="pieza3" class="dropdown">
+            <!-- Se llena con JS -->
+        </select>
+        <select name="pieza" id="pieza4" class="dropdown hidden">
+            <!-- Se llena con JS -->
+        </select>
+        <!-- Los selects ocultos inicialmente (5-8) -->
+        <select name="pieza" id="pieza5" class="dropdown hidden">
+            <!-- Se llena con JS -->
+        </select>
+        <select name="pieza" id="pieza6" class="dropdown hidden">
+            <!-- Se llena con JS -->
+        </select>
+        <select name="pieza" id="pieza7" class="dropdown hidden">
+            <!-- Se llena con JS -->
+        </select>
+        <select name="pieza" id="pieza8" class="dropdown hidden">
+            <!-- Se llena con JS -->
+        </select>
+
+        <button id="showPiezas" class="btn-agregar Montserrat-subtitulos">Agregar más</button>
+    </div>
+
+    <!--SECCION CONFIGURACION-->
+    <section class="configuracion-seccion">
+        <a class="seccion-titulo configuracion-titulo Montserrat-mid-titulos"> Configuración</a>
+        <div class="cotas" id="cotas"><p id="numerosCotas"></p></div>
+        <div class="pre-config" id="imagenPiezas">
+            <div class="linea-ancho" id="lineaAncho" style="position: absolute; background: black; left: 0;"></div>
+            <div id="lineaProfundidad" style="position: absolute; background: black; top: 0; left: 0;"></div>
+            <canvas width=400 height=300></canvas>
+        </div>
+    </section>
+
+    <!-- SECCION COJINES -->
+    <div id="seccionCojines">
+        <a class="seccion-titulo Montserrat-mid-titulos">Suplemento Cojines</a>
+        <div class="cojines-div">
+            <label class="input-title Montserrat-subtitulos">Seleccione cantidad</label>
+            <p class="cojin-descripcion Montserrat-subtitulos" translate="no">Cojín Cuadrado 45x45 cms</p>
+            <select name="Seleccione cantidades" id="cojines" class="dropdown">
+                <option value="0" class="cojinesopt">0</option>
+                <option value="1" class="cojinesopt">1</option>
+                <option value="2" class="cojinesopt">2</option>
+                <option value="3" class="cojinesopt">3</option>
+                <option value="4" class="cojinesopt">4</option>
+                <option value="5" class="cojinesopt">5</option>
+                <option value="6" class="cojinesopt">6</option>
+                <option value="7" class="cojinesopt">7</option>
+                <option value="8" class="cojinesopt">8</option>
+            </select>
+        </div>
+    </div>
+</section>
+
+<!-- RESUMEN SECCION -->
+<section class="section-resumen" id="seccionResumen">
+    <a class="seccion-titulo Montserrat-mid-titulos">Resumen</a>
+    <ul class="ul-config" id="resumen"></ul>
+</section>
+
+<!--BTN CONTINUAR-->
+<button class="btn-pdf Montserrat-subtitulos" id="openModalBtn">Continuar</button>
+
+<!-- SECCION CLIENTE -->
+<section class="section-cliente" id="seccionCliente" style="display: none;">
+    <a class="seccion-titulo Montserrat-mid-titulos">Cliente</a>
+    <div class="form-inputs">
+        <label for="nombreCliente" class="input-title Montserrat-subtitulos">Nombre del cliente*</label>
+        <input type="text" id="nombreCliente" name="nombreCliente" class="dropdown" required placeholder="Ingrese el nombre del cliente">
+    </div>
+    
+    <button class="btn-pdf Montserrat-subtitulos" id="generarPdfBtn">Generar presupuesto</button>
+</section>
+
+<footer class="footer-legal">
+  <div class="footer-legal-text">
+    * Presupuesto con validez de 90 días desde la fecha de emisión. Los plazos de entrega pueden variar según disponibilidad de tejidos y componentes. Para importes &lt; 300€ + IVA (pufs, metrajes, etc.) se aplican 12€ de portes; a partir de 300€ los portes son gratuitos. La fecha de emisión define la validez del presupuesto; el Nº de referencia permite localizarlo. Más información y condiciones completas en la web.
+  </div>
+</footer>
+
+<!-- SCRIPTS DE PIEZAS Y CONFIGURACION -->
+<script defer src="./app/data/piezasBianca.js"></script>
+<script defer src="./app/data/piezasVera.js"></script>
+<script defer src="./app/data/piezasNora.js"></script>
+<script defer src="./app/data/piezasLuna.js"></script>
+<script defer src="./app/data/piezasAura.js"></script>
+<script defer src="./app/data/piezasDafne.js"></script>
+<script defer src="./app/data/piezasOlivia.js"></script>
+<script defer src="./app/index.js"></script>
+<script defer src="./app/showmore.js"></script>
+<script type="module" defer src="./app/pdfgenerator.js"></script>
+<script defer src="./app/data/imgmodelos.js"></script>
+<script defer src="./app/data/imgtelas.js"></script>
+<script defer src="./app/switchs/switchs.js"></script>
+<script defer src="./app/piezasconfiguracion.js"></script>
+
+</body>
+</html>
