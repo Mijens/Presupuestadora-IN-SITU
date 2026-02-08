@@ -219,13 +219,8 @@ input[type="text"]::placeholder {
 }
 
 #cojines:focus {
-  outline: 2px solid #343434;
-  outline-offset: 2px;
-}
-
-#cojines:focus {
-  outline: 2px solid #343434;
-  outline-offset: 2px;
+  outline: none; /* Quitar el recuadro gris */
+  border-color: #343434; /* Solo cambiar el color del borde */
 }
 
 .suma-cojin p.sum {
@@ -388,6 +383,10 @@ section{
   aspect-ratio: 3/2;
   overflow: visible;
   transition: all 0.3s ease;
+  padding-top: 50px; /* Espacio arriba para la cota de ancho */
+  padding-right: 50px; /* Espacio a la derecha para la cota de profundidad */
+  padding-bottom: 20px; /* Espacio abajo */
+  padding-left: 20px; /* Espacio a la izquierda */
 }
 
 .img-config {
@@ -446,7 +445,28 @@ section{
   align-items: flex-start;
   width: 40%;
   margin: auto;
-  border-top: #343434 1px solid;
+}
+
+/* Botón Generar Presupuesto */
+.btn-generar {
+  display: block;
+  margin: 15px auto;
+  padding: 1rem 1.5rem;
+  font-weight: 500;
+  width: 250px;
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 0px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn-generar:hover {
+  background-color: #000;
+  color: #fff;
 }
 
 /* Título RESUMEN alineado a la izquierda */

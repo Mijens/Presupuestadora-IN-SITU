@@ -88,18 +88,15 @@
     <ul class="ul-config" id="resumen"></ul>
 </section>
 
-<!--BTN CONTINUAR-->
-<button class="btn-pdf Montserrat-subtitulos" id="openModalBtn">Continuar</button>
-
 <!-- SECCION CLIENTE -->
-<section class="section-cliente" id="seccionCliente" style="display: none;">
+<section class="section-cliente" id="seccionCliente">
     <a class="seccion-titulo Montserrat-mid-titulos">Cliente</a>
     <div class="form-inputs">
         <label for="nombreCliente" class="input-title Montserrat-subtitulos">Nombre del cliente*</label>
         <input type="text" id="nombreCliente" name="nombreCliente" class="dropdown" required placeholder="Ingrese el nombre del cliente">
     </div>
     
-    <button class="btn-pdf Montserrat-subtitulos" id="generarPdfBtn">Generar presupuesto</button>
+    <button class="btn-generar Montserrat-subtitulos" id="generarPdfBtn">Generar presupuesto</button>
 </section>
 
 <footer class="footer-legal">
@@ -107,6 +104,11 @@
     * Presupuesto con validez de 90 días desde la fecha de emisión. Los plazos de entrega pueden variar según disponibilidad de tejidos y componentes. Para importes &lt; 300€ + IVA (pufs, metrajes, etc.) se aplican 12€ de portes; a partir de 300€ los portes son gratuitos. La fecha de emisión define la validez del presupuesto; el Nº de referencia permite localizarlo. Más información y condiciones completas en la web.
   </div>
 </footer>
+
+<!-- PDF-LIB para generar PDFs -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<!-- HTML2CANVAS para capturar elementos visuales -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <!-- SCRIPTS DE PIEZAS Y CONFIGURACION -->
 <script defer src="./app/data/piezasBianca.js"></script>
@@ -118,7 +120,7 @@
 <script defer src="./app/data/piezasOlivia.js"></script>
 <script defer src="./app/index.js"></script>
 <script defer src="./app/showmore.js"></script>
-<script type="module" defer src="./app/pdfgenerator.js"></script>
+<script defer src="./app/pdfgenerator.js"></script>
 <script defer src="./app/data/imgmodelos.js"></script>
 <script defer src="./app/data/imgtelas.js"></script>
 <script defer src="./app/switchs/switchs.js"></script>

@@ -171,39 +171,10 @@ function generarResumen() {
         : ""
     }
     ${lineasCojines}
-    <li class="precioResumen inter-resumen">Precio Total: <span id="precioTotal"> &nbsp ${precioTotal.toFixed(2)}€</span></li>
+    <li class="precioResumen inter-resumen">Precio Total: <span id="precioTotal"> &nbsp ${precioTotal.toFixed(2)}€ +IVA</span></li>
   `;
 
   actualizarPreciosEnDropdown();
-}
-
-/*----------------MOSTRAR SECCION CLIENTE------------------*/
-const openModalBtn = document.getElementById("openModalBtn");
-const seccionCliente = document.getElementById("seccionCliente");
-const generarPdfBtn = document.getElementById("generarPdfBtn");
-
-if (openModalBtn) {
-  openModalBtn.addEventListener("click", function () {
-    // Mostrar la sección de cliente
-    seccionCliente.style.display = "block";
-    // Scroll suave hacia la sección de cliente
-    seccionCliente.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-}
-
-if (generarPdfBtn) {
-  generarPdfBtn.addEventListener("click", function () {
-    const nombreCliente = document.getElementById("nombreCliente").value.trim();
-    
-    if (!nombreCliente) {
-      alert("Por favor, ingrese el nombre del cliente");
-      return;
-    }
-    
-    // Aquí irá la función para generar el PDF
-    console.log("Generando PDF para cliente:", nombreCliente);
-    // TODO: Llamar a la función de generación de PDF
-  });
 }
 
 // ===============================================================================

@@ -245,8 +245,10 @@ function mostrarImagenes() {
   const slots = obtenerPiezasPorSlot();
   console.log("📦 Slots obtenidos:", slots);
 
-  let currentX = 0;
-  let currentY = 0; // Empezar en 0 porque el contenedor tiene padding-top
+  const OFFSET_TOP = 45; // Offset superior reducido (de 60 a 45)
+  const OFFSET_LEFT = 15; // Offset izquierdo para no cortar el círculo
+  let currentX = OFFSET_LEFT; // Empezar con offset a la izquierda
+  let currentY = OFFSET_TOP; // Empezar con offset arriba
   let rotateAfterRincon = false;
   let rinconEncontrado = false;
   let rinconInfo = { x: 0, y: 0, width: 0, height: 0 };
