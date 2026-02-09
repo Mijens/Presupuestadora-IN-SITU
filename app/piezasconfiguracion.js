@@ -246,10 +246,35 @@ function mostrarImagenes() {
   const slots = obtenerPiezasPorSlot();
   console.log("📦 Slots obtenidos:", slots);
 
-  // Si no hay piezas, reducir altura al mínimo
+  // Si no hay piezas, mostrar texto placeholder
   const hayPiezas = slots.some(slot => slot && slot.id !== "None");
+  
+  // Remover placeholder anterior si existe
+  const placeholderExistente = imagenesDiv.querySelector(".placeholder-text");
+  if (placeholderExistente) {
+    placeholderExistente.remove();
+  }
+  
   if (!hayPiezas) {
     imagenesDiv.style.height = "150px";
+    
+    // Crear y agregar texto placeholder
+    const placeholder = document.createElement("div");
+    placeholder.className = "placeholder-text";
+    placeholder.textContent = "Seleccione piezas para ver la configuración";
+    placeholder.style.cssText = `
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #999;
+      font-size: 14px;
+      font-family: 'Montserrat', sans-serif;
+      text-align: center;
+      pointer-events: none;
+      user-select: none;
+    `;
+    imagenesDiv.appendChild(placeholder);
     return;
   }
 
