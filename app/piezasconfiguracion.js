@@ -151,11 +151,13 @@ function posicionarCotas(container, ancho, profundidad) {
   
   console.log(`📐 Bounding box: top=${top}, bottom=${bottom}, left=${left}, right=${right}`);
   
-  const GAP = 20;
+  // Ajustar GAP según el tamaño de pantalla
+  const isMobile = window.innerWidth <= 768;
+  const GAP = isMobile ? 15 : 20;
   const lineaTop = top - GAP;
-  const textoTop = lineaTop - 25; // Un poco más arriba para igualar proporción
+  const textoTop = lineaTop - (isMobile ? 20 : 25);
   
-  console.log(`📏 Línea en: ${lineaTop}px, Texto en: ${textoTop}px`);
+  console.log(`📏 Línea en: ${lineaTop}px, Texto en: ${textoTop}px, Mobile: ${isMobile}`);
   
   // Línea horizontal superior
   if (lineaAncho) {
@@ -194,7 +196,7 @@ function posicionarCotas(container, ancho, profundidad) {
       left: ${left + (right - left) / 2}px;
       transform: translateX(-50%);
       font-weight: 600;
-      font-size: 14px;
+      font-size: ${isMobile ? '11px' : '14px'};
       color: black;
       display: block;
       z-index: 10;
@@ -214,7 +216,7 @@ function posicionarCotas(container, ancho, profundidad) {
       left: ${right + GAP + 10}px;
       transform: translateY(-50%);
       font-weight: 600;
-      font-size: 14px;
+      font-size: ${isMobile ? '11px' : '14px'};
       color: black;
       display: block;
       z-index: 10;
@@ -226,7 +228,7 @@ function posicionarCotas(container, ancho, profundidad) {
 }
 
 // =====================
-// MOSTRAR IMÁGENES
+// MOSTRAR IMÁGENES CON RESPONSIVE
 // =====================
 function mostrarImagenes() {
   const imagenesDiv = document.getElementById("imagenPiezas");
@@ -238,17 +240,34 @@ function mostrarImagenes() {
   Array.from(imagenesDiv.querySelectorAll(".img-config")).forEach(el => el.remove());
   
   imagenesDiv.style.position = "relative";
-  imagenesDiv.style.paddingTop = "80px"; // Forzar espacio para cotas
-  imagenesDiv.style.minHeight = "200px";
+  imagenesDiv.style.minHeight = "150px"; // Altura mínima reducida
   ensureCotasElements(imagenesDiv);
 
   const slots = obtenerPiezasPorSlot();
   console.log("📦 Slots obtenidos:", slots);
 
-  const OFFSET_TOP = 45; // Offset superior reducido (de 60 a 45)
-  const OFFSET_LEFT = 15; // Offset izquierdo para no cortar el círculo
-  let currentX = OFFSET_LEFT; // Empezar con offset a la izquierda
-  let currentY = OFFSET_TOP; // Empezar con offset arriba
+  // Si no hay piezas, reducir altura al mínimo
+  const hayPiezas = slots.some(slot => slot && slot.id !== "None");
+  if (!hayPiezas) {
+    imagenesDiv.style.height = "150px";
+    return;
+  }
+
+  // Factor de escala según ancho de pantalla
+  const screenWidth = window.innerWidth;
+  let scaleFactor = 1;
+  if (screenWidth <= 360) {
+    scaleFactor = 0.5;
+  } else if (screenWidth <= 480) {
+    scaleFactor = 0.6;
+  } else if (screenWidth <= 768) {
+    scaleFactor = 0.75;
+  }
+
+  const OFFSET_TOP = 5; // Valor pequeño para pantalla normal
+  const OFFSET_LEFT = 15;
+  let currentX = OFFSET_LEFT;
+  let currentY = OFFSET_TOP;
   let rotateAfterRincon = false;
   let rinconEncontrado = false;
   let rinconInfo = { x: 0, y: 0, width: 0, height: 0 };
@@ -256,6 +275,9 @@ function mostrarImagenes() {
   let totalMedidaAncho = 0;
   let totalMedidaProfundidad = 0;
   let maxProfundidadNormal = 0;
+  
+  // Variables para calcular altura necesaria
+  let maxY = 0;
   
   const promises = [];
 
@@ -273,8 +295,9 @@ function mostrarImagenes() {
     const medidap = piezaSeleccionada.medidap || 0;
     const imageUrl = piezaSeleccionada.img;
 
-    const finalWidth = piezaSeleccionada.width || medida;
-    const finalHeight = piezaSeleccionada.height || medidap;
+    // Aplicar factor de escala a las dimensiones
+    const finalWidth = (piezaSeleccionada.width || medida) * scaleFactor;
+    const finalHeight = (piezaSeleccionada.height || medidap) * scaleFactor;
 
     if (imageUrl && piezaId !== "None") {
       const imgElement = document.createElement("img");
@@ -307,9 +330,11 @@ function mostrarImagenes() {
 
         currentX = rinconInfo.x + finalWidth;
         currentY = rinconInfo.y + finalHeight;
+        
+        // Actualizar maxY
+        maxY = Math.max(maxY, currentY);
 
         totalMedidaAncho += medida;
-        // El rincón establece la profundidad base
         totalMedidaProfundidad = medidap;
 
       } else if (rotateAfterRincon) {
@@ -324,13 +349,20 @@ function mostrarImagenes() {
         imgElement.style.top = `${posY}px`;
 
         currentY += finalWidth;
-        // Las piezas rotadas SUMAN a la profundidad
+        
+        // Actualizar maxY
+        maxY = Math.max(maxY, currentY);
+        
         totalMedidaProfundidad += medida;
 
       } else {
         imgElement.style.left = `${currentX}px`;
         imgElement.style.top = `${currentY}px`;
         currentX += finalWidth;
+        
+        // Actualizar maxY
+        maxY = Math.max(maxY, currentY + finalHeight);
+        
         totalMedidaAncho += medida;
         maxProfundidadNormal = Math.max(maxProfundidadNormal, medidap);
       }
@@ -367,14 +399,18 @@ function mostrarImagenes() {
 
   Promise.all(promises).then(() => {
     const anchoFinal = totalMedidaAncho;
-    // Si hay rincón, usar totalMedidaProfundidad (que incluye rincón + rotadas)
-    // Si no hay rincón, usar la máxima profundidad normal
     const profundidadFinal = rinconEncontrado 
       ? totalMedidaProfundidad
       : maxProfundidadNormal;
     
     window.__ULTIMO_TOTAL_MEDIDA_CM__ = anchoFinal;
     window.__ULTIMA_PROFUNDIDAD_CM__ = profundidadFinal;
+    
+    // Ajustar altura del contenedor dinámicamente
+    // Agregar 30px de margen inferior para las cotas de profundidad
+    const alturaFinal = maxY + 30;
+    imagenesDiv.style.height = `${alturaFinal}px`;
+    console.log(`📐 Altura del contenedor ajustada a: ${alturaFinal}px`);
     
     posicionarCotas(imagenesDiv, anchoFinal, profundidadFinal);
     console.log(`📏 Cotas finales: ${anchoFinal}cm (ancho) x ${profundidadFinal}cm (profundidad)`);

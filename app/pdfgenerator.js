@@ -50,6 +50,69 @@ async function capturePNG(selectorOrEl, options = {}) {
     : selectorOrEl;
   if (!el) return null;
 
+  // Guardar estilos originales
+  const originalPaddingTop = el.style.paddingTop;
+  const originalPaddingBottom = el.style.paddingBottom;
+  const originalPaddingRight = el.style.paddingRight;
+  const originalPaddingLeft = el.style.paddingLeft;
+  
+  // Detectar móvil
+  const isMobile = window.innerWidth <= 768;
+  
+  // Padding FIJO - valores EXTREMOS para móvil para evitar cortes
+  const paddingValues = isMobile 
+    ? { top: '80px', right: '300px', bottom: '250px', left: '50px', desplazamiento: 50 }
+    : { top: '50px', right: '40px', bottom: '40px', left: '10px', desplazamiento: 45 };
+  
+  console.log(`📱 Captura - isMobile: ${isMobile}, padding: T:${paddingValues.top} R:${paddingValues.right} B:${paddingValues.bottom} Desp:${paddingValues.desplazamiento}`);
+  
+  // Guardar posiciones originales de las cotas
+  const txtAncho = el.querySelector("#ancho");
+  const lineaAncho = el.querySelector("#lineaAncho");
+  const txtProfundidad = el.querySelector("#profundidad");
+  const lineaProfundidad = el.querySelector("#lineaProfundidad");
+  
+  const originalTopAncho = txtAncho ? txtAncho.style.top : null;
+  const originalTopLineaAncho = lineaAncho ? lineaAncho.style.top : null;
+  const originalTopProfundidad = txtProfundidad ? txtProfundidad.style.top : null;
+  const originalTopLineaProfundidad = lineaProfundidad ? lineaProfundidad.style.top : null;
+  
+  // Guardar posiciones originales de las piezas
+  const piezas = el.querySelectorAll(".img-config");
+  const originalPiezasTops = Array.from(piezas).map(p => p.style.top);
+  
+  // Aplicar padding con !important
+  el.style.setProperty('padding-top', paddingValues.top, 'important');
+  el.style.setProperty('padding-bottom', paddingValues.bottom, 'important');
+  el.style.setProperty('padding-right', paddingValues.right, 'important');
+  el.style.setProperty('padding-left', paddingValues.left, 'important');
+  
+  // Ajustar cotas de ANCHO (arriba)
+  if (txtAncho) txtAncho.style.top = isMobile ? '5px' : '5px';
+  if (lineaAncho) lineaAncho.style.top = isMobile ? '30px' : '30px';
+  
+  // Ajustar cotas de PROFUNDIDAD y piezas (moverlas abajo)
+  const desp = paddingValues.desplazamiento;
+  if (txtProfundidad) {
+    const currentTop = parseInt(txtProfundidad.style.top) || 0;
+    txtProfundidad.style.top = `${currentTop + desp}px`;
+  }
+  if (lineaProfundidad) {
+    const currentTop = parseInt(lineaProfundidad.style.top) || 0;
+    lineaProfundidad.style.top = `${currentTop + desp}px`;
+  }
+  piezas.forEach(pieza => {
+    const currentTop = parseInt(pieza.style.top) || 0;
+    pieza.style.top = `${currentTop + desp}px`;
+  });
+  
+  // Forzar recalculo del layout
+  el.offsetHeight;
+  
+  // Esperar a que se apliquen los estilos
+  await wait(300);
+
+  // Opciones de html2canvas
   const defaultOptions = {
     scale: 2,
     useCORS: true,
@@ -79,6 +142,32 @@ async function capturePNG(selectorOrEl, options = {}) {
   try {
     const canvas = await html2canvas(el, defaultOptions);
 
+    // IMPORTANTE: Restaurar padding y posiciones originales inmediatamente
+    el.style.paddingTop = originalPaddingTop;
+    el.style.paddingBottom = originalPaddingBottom;
+    el.style.paddingRight = originalPaddingRight;
+    el.style.paddingLeft = originalPaddingLeft;
+    
+    if (txtAncho && originalTopAncho !== null) {
+      txtAncho.style.top = originalTopAncho;
+    }
+    if (lineaAncho && originalTopLineaAncho !== null) {
+      lineaAncho.style.top = originalTopLineaAncho;
+    }
+    if (txtProfundidad && originalTopProfundidad !== null) {
+      txtProfundidad.style.top = originalTopProfundidad;
+    }
+    if (lineaProfundidad && originalTopLineaProfundidad !== null) {
+      lineaProfundidad.style.top = originalTopLineaProfundidad;
+    }
+    
+    // Restaurar posiciones de las piezas
+    piezas.forEach((pieza, index) => {
+      if (originalPiezasTops[index]) {
+        pieza.style.top = originalPiezasTops[index];
+      }
+    });
+    
     Object.keys(prevStyles).forEach(key => {
       el.style[key] = prevStyles[key];
     });
@@ -91,6 +180,32 @@ async function capturePNG(selectorOrEl, options = {}) {
 
   } catch (error) {
     console.error("Error capturando elemento:", error);
+    // Restaurar padding y posiciones en caso de error
+    el.style.paddingTop = originalPaddingTop;
+    el.style.paddingBottom = originalPaddingBottom;
+    el.style.paddingRight = originalPaddingRight;
+    el.style.paddingLeft = originalPaddingLeft;
+    
+    if (txtAncho && originalTopAncho !== null) {
+      txtAncho.style.top = originalTopAncho;
+    }
+    if (lineaAncho && originalTopLineaAncho !== null) {
+      lineaAncho.style.top = originalTopLineaAncho;
+    }
+    if (txtProfundidad && originalTopProfundidad !== null) {
+      txtProfundidad.style.top = originalTopProfundidad;
+    }
+    if (lineaProfundidad && originalTopLineaProfundidad !== null) {
+      lineaProfundidad.style.top = originalTopLineaProfundidad;
+    }
+    
+    // Restaurar posiciones de las piezas
+    piezas.forEach((pieza, index) => {
+      if (originalPiezasTops[index]) {
+        pieza.style.top = originalPiezasTops[index];
+      }
+    });
+    
     Object.keys(prevStyles).forEach(key => {
       el.style[key] = prevStyles[key];
     });
@@ -117,15 +232,22 @@ async function captureAndEmbedImage(pdfDoc, page, selector, x, y, maxWidth, maxH
   if (pdfImage) {
     const { width: imgWidth, height: imgHeight } = pdfImage;
     
+    // Detectar móvil y aplicar escala adicional
+    const isMobile = window.innerWidth <= 768;
+    const mobileScale = isMobile ? 0.75 : 1; // Reducir al 75% en móvil
+    
     const scaleX = maxWidth / imgWidth;
     const scaleY = maxHeight / imgHeight;
-    const scale = Math.min(scaleX, scaleY, 1);
+    const scale = Math.min(scaleX, scaleY, 1) * mobileScale;
     
     const finalWidth = imgWidth * scale;
     const finalHeight = imgHeight * scale;
     
-    const offsetX = (maxWidth - finalWidth) / 2;
-    const offsetY = (maxHeight - finalHeight) / 2;
+    // Alinear a la izquierda y arriba
+    const offsetX = 0;
+    const offsetY = maxHeight - finalHeight;
+    
+    console.log(`📄 PDF Image - isMobile: ${isMobile}, scale: ${scale.toFixed(2)}, size: ${finalWidth.toFixed(0)}x${finalHeight.toFixed(0)}`);
     
     page.drawImage(pdfImage, {
       x: x + offsetX,
@@ -253,19 +375,29 @@ async function createPDF() {
   // ============================================
   // CONFIGURACIÓN (Centro superior - bajado más para mostrar cota superior)
   // ============================================
-  let yPosition = 630; // Subido de 600 a 630 - más arriba
+  const isMobilePDF = window.innerWidth <= 768;
+  let yPosition = isMobilePDF ? 665 : 640; // Bajado de 675 a 665 para dar más aire en móvil
   
   drawText("CONFIGURACIÓN", 50, yPosition, 12, helveticaBoldFont);
-  yPosition -= 15; // Aumentado de 10 a 15 - un poquito más de espacio
+  yPosition -= 15;
   
-  // Capturar imagen de la configuración (más grande y pegada a la izquierda)
+  // Capturar imagen de la configuración
   console.log("Capturando configuración...");
+  
+  // Obtener altura real del contenedor de configuración
+  const imagenPiezasEl = document.querySelector("#imagenPiezas");
+  const alturaReal = imagenPiezasEl ? imagenPiezasEl.offsetHeight : 280;
+  // En móvil, capturar MUCHA más altura para configuraciones grandes
+  const alturaCaptura = isMobilePDF ? Math.min(alturaReal * 1.5, 400) : Math.min(alturaReal * 0.8, 280);
+  
+  console.log(`📄 PDF - isMobile: ${isMobilePDF}, yPosition: ${yPosition}, alturaCaptura: ${alturaCaptura}, alturaReal: ${alturaReal}`);
+  
   const configSuccess = await captureAndEmbedImage(
     pdfDoc, page, "#imagenPiezas", 
-    50,              // X: pegado al margen izquierdo (igual que el título)
-    yPosition - 270, // Y: más cerca (antes era -230)
-    450,             // Ancho: más grande (antes era 400)
-    280              // Alto: más grande (antes era 200)
+    50,
+    yPosition - alturaCaptura,
+    450,
+    alturaCaptura
   );
   
   if (!configSuccess) {

@@ -38,17 +38,24 @@
   }
   
   #imagenPiezas {
-    max-width: 100%;
+    max-width: 100% !important;
     min-height: 200px;
     margin: 20px auto;
-    transform: scale(0.8);
-    transform-origin: top center;
+    padding-top: 10px !important;
+    padding-right: 30px !important;
+    padding-bottom: 10px !important;
+    padding-left: 10px !important;
   }
   
   #ancho,
   #profundidad {
-    font-size: 12px !important;
-    padding: 1px 4px;
+    font-size: 11px !important;
+    padding: 1px 3px;
+  }
+  
+  #lineaAncho, 
+  #lineaProfundidad {
+    opacity: 0.9;
   }
   
   #disclaimerConfig {
@@ -59,10 +66,6 @@
   #lineaAncho::before, #lineaAncho::after,
   #lineaProfundidad::before, #lineaProfundidad::after {
     border-width: 4px;
-  }
-  
-  #lineaAncho, #lineaProfundidad {
-    opacity: 0.8;
   }
 }
 
@@ -76,14 +79,17 @@
   #imagenPiezas {
     min-height: 180px;
     margin: 15px auto;
-    transform: scale(0.65);
-    transform-origin: top center;
   }
   
   #ancho,
   #profundidad {
     font-size: 10px !important;
-    padding: 1px 3px;
+    padding: 1px 2px;
+  }
+  
+  #lineaAncho,
+  #lineaProfundidad {
+    opacity: 0.85;
   }
   
   #disclaimerConfig {
@@ -101,13 +107,17 @@
 @media (max-width: 360px) {
   #imagenPiezas {
     min-height: 150px;
-    transform: scale(0.55);
-    transform-origin: top center;
   }
   
   #ancho,
   #profundidad {
     font-size: 9px !important;
+    padding: 1px 2px;
+  }
+  
+  #lineaAncho,
+  #lineaProfundidad {
+    opacity: 0.8;
   }
 }
 
@@ -145,11 +155,12 @@
   position: relative;
   width: 100%;
   max-width: 100%;
-  aspect-ratio: 3 / 2;
   height: auto !important;
   overflow: visible;
-  margin-top: 30px !important; 
+  margin-top: 10px !important; 
   margin: 0 auto;
+  transition: height 0.3s ease; /* Transición suave al cambiar altura */
+  box-sizing: border-box;
 }
 
 #imagenPiezas canvas {
@@ -157,12 +168,6 @@
   height: fit-content !important;
   max-width: 100%;
   display: block;
-}
-
-/* Hacer que las imágenes de piezas sean responsive */
-#imagenPiezas .img-config {
-  max-width: 100% !important;
-  height: auto !important;
 }
 
 /* Responsive de secciones principales */
