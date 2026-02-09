@@ -1,4 +1,3 @@
-
 @media (max-width: 1024px) {
   .configuracion-seccion {
     width: 95%;
@@ -14,20 +13,24 @@
     padding-bottom: 1.5rem;
   }
 }
+
 @media (max-width: 420px) {
   #imagenPiezas canvas {
     width: 100% !important;
     height: auto !important;
   }
 }
+
 /* Móviles grandes */
 @media (max-width: 768px) {
-  .titulo-solicitud{
-      padding: 0px 15px;
+  .titulo-solicitud {
+    padding: 0px 15px;
   }
-  section{
-      padding: 0px 10px;
-    }
+  
+  section {
+    padding: 0px 10px;
+  }
+  
   .configuracion-seccion {
     width: 100%;
     padding: 1rem 0.5rem;
@@ -38,11 +41,13 @@
     max-width: 100%;
     min-height: 200px;
     margin: 20px auto;
+    transform: scale(0.8);
+    transform-origin: top center;
   }
   
   #ancho,
   #profundidad {
-    font-size: 14px;
+    font-size: 12px !important;
     padding: 1px 4px;
   }
   
@@ -54,6 +59,10 @@
   #lineaAncho::before, #lineaAncho::after,
   #lineaProfundidad::before, #lineaProfundidad::after {
     border-width: 4px;
+  }
+  
+  #lineaAncho, #lineaProfundidad {
+    opacity: 0.8;
   }
 }
 
@@ -67,11 +76,13 @@
   #imagenPiezas {
     min-height: 180px;
     margin: 15px auto;
+    transform: scale(0.65);
+    transform-origin: top center;
   }
   
   #ancho,
   #profundidad {
-    font-size: 12px;
+    font-size: 10px !important;
     padding: 1px 3px;
   }
   
@@ -90,11 +101,13 @@
 @media (max-width: 360px) {
   #imagenPiezas {
     min-height: 150px;
+    transform: scale(0.55);
+    transform-origin: top center;
   }
   
   #ancho,
   #profundidad {
-    font-size: 11px;
+    font-size: 9px !important;
   }
 }
 
@@ -113,43 +126,88 @@
 /* --- Imagen de referencia de tela responsive --- */
 #telaReferencia img,
 .img-referencia-tela img {
-
-height: auto;
-object-fit: contain;
-max-width: 250px;
-display: block;
-margin: 0 auto;
+  height: auto;
+  object-fit: contain;
+  max-width: 250px;
+  display: block;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
-#telaReferencia img,
-.img-referencia-tela img {
-  max-width: 180px;
+  #telaReferencia img,
+  .img-referencia-tela img {
+    max-width: 180px;
+  }
 }
-}
+
 /* Ajuste responsive para el área de configuración */
 #imagenPiezas {
-position: relative;
-width: 100%;
-max-width: 100%;
-aspect-ratio: 3 / 2;
-height: auto !important;
-overflow: visible;
-margin-top: 30px !important; 
-margin: 0 auto;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 3 / 2;
+  height: auto !important;
+  overflow: visible;
+  margin-top: 30px !important; 
+  margin: 0 auto;
 }
 
 #imagenPiezas canvas {
-width: 100% !important;
-height: fit-content !important;
-max-width: 100%;
-display: block;
+  width: 100% !important;
+  height: fit-content !important;
+  max-width: 100%;
+  display: block;
 }
 
-@media (max-width: 600px) {
-#imagenPiezas {
-
-  aspect-ratio: 4 / 3;
-  min-height: 180px;
+/* Hacer que las imágenes de piezas sean responsive */
+#imagenPiezas .img-config {
+  max-width: 100% !important;
+  height: auto !important;
 }
+
+/* Responsive de secciones principales */
+@media (max-width: 768px) {
+  .pieza-seccion,
+  .section-tejidos,
+  .section-resumen,
+  .section-cliente {
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  .dropdown {
+    font-size: 14px;
+    min-height: 40px;
+  }
+  
+  .seccion-titulo {
+    font-size: 18px;
+  }
+  
+  .input-title {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pieza-seccion,
+  .section-tejidos,
+  .section-resumen,
+  .section-cliente {
+    width: 95%;
+  }
+  
+  .dropdown {
+    font-size: 13px;
+    min-height: 38px;
+  }
+  
+  .seccion-titulo {
+    font-size: 16px;
+  }
+  
+  .btn-generar {
+    font-size: 14px;
+    padding: 12px 20px;
+  }
 }

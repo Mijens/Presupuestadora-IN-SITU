@@ -74,12 +74,10 @@ async function capturePNG(selectorOrEl, options = {}) {
   el.offsetHeight;
   
   await waitForImagesToLoad(el);
-  await wait(500); // Más tiempo para renderizar
+  await wait(500);
 
   try {
-    console.log('Iniciando captura de:', selectorOrEl);
     const canvas = await html2canvas(el, defaultOptions);
-    console.log('Captura completada. Canvas:', canvas.width, 'x', canvas.height);
 
     Object.keys(prevStyles).forEach(key => {
       el.style[key] = prevStyles[key];
@@ -87,7 +85,6 @@ async function capturePNG(selectorOrEl, options = {}) {
 
     const dataUrl = canvas.toDataURL("image/png");
     if (!dataUrl || !dataUrl.startsWith("data:image/png")) {
-      console.error('Error: dataUrl inválido');
       return null;
     }
     return dataUrl;
@@ -156,11 +153,17 @@ async function createPDF() {
   // Obtener cojines
   const cantidadCojines = parseInt(document.getElementById("cojines").value) || 0;
   
+  // Obtener tejido seleccionado
+  const tejidoSeleccionado = document.getElementById("tejidos").value;
+  
   // Calcular precios
   let precioCojines = 0;
   let precioUnitarioCojin = 0;
   if (cantidadCojines > 0) {
-    precioUnitarioCojin = cojines[0].pricesBySerie["SERIE 2"] || 0;
+    // Usar precio del cojín según tejido seleccionado
+    precioUnitarioCojin = (typeof preciosCojinesPorTejido !== 'undefined' && preciosCojinesPorTejido[tejidoSeleccionado]) 
+      ? preciosCojinesPorTejido[tejidoSeleccionado] 
+      : (preciosCojinesPorTejido ? preciosCojinesPorTejido["None"] : 70);
     const multiplicador = obtenerMultiplicadorTarifa();
     precioUnitarioCojin = precioUnitarioCojin * multiplicador;
     precioCojines = precioUnitarioCojin * cantidadCojines;
@@ -299,7 +302,7 @@ async function createPDF() {
 
   // Encabezados de tabla
   drawText("PIEZA", 70, yPosition, 9, helveticaBoldFont);
-  drawText("VALOR U.", 480, yPosition, 9, helveticaBoldFont);
+  drawText("VALOR", 480, yPosition, 9, helveticaBoldFont); // Cambiado de "VALOR U." a "VALOR"
   yPosition -= 5;
   
   // Línea separadora
@@ -318,22 +321,22 @@ async function createPDF() {
   if (piezasFiltradas.length > 0) {
     piezasFiltradas.forEach((pieza) => {
       const precioPieza = obtenerPrecioPorMaterial(pieza.id, "SERIE 2");
-      const textoPieza = `${pieza.id} ${pieza.nombre}`;
+      const textoPieza = `${pieza.id} ${pieza.nombre}${tejidoSeleccionado && tejidoSeleccionado !== 'None' ? ' / TEJIDO ' + tejidoSeleccionado : ''}`;
       const textoPrecio = `${precioPieza.toFixed(2)}€`;
       
       drawText(textoPieza, 70, yPosition, 8, helveticaFont, colorGris);
-      drawText(textoPrecio, 500, yPosition, 8, helveticaFont, colorGris);
+      drawText(textoPrecio, 480, yPosition, 8, helveticaFont, colorGris); // Cambiado de 500 a 480 para alinear con el encabezado
       yPosition -= 15;
     });
   }
 
   // Cojines
   if (cantidadCojines > 0) {
-    const textoCojin = `COJÍN DE ADORNO 45X45 CM`;
+    const textoCojin = `COJÍN DE ADORNO 45X45 CM${tejidoSeleccionado && tejidoSeleccionado !== 'None' ? ' / TEJIDO ' + tejidoSeleccionado : ''}`;
     const textoPrecioCojin = `${precioUnitarioCojin.toFixed(2)}€ X${cantidadCojines}`;
     
     drawText(textoCojin, 70, yPosition, 8, helveticaFont, colorGris);
-    drawText(textoPrecioCojin, 470, yPosition, 8, helveticaFont, colorGris);
+    drawText(textoPrecioCojin, 480, yPosition, 8, helveticaFont, colorGris); // Cambiado de 500 a 480 para alinear con el encabezado
     yPosition -= 20;
   }
 
@@ -401,8 +404,6 @@ async function createPDF() {
   link.click();
   
   URL.revokeObjectURL(url);
-  
-  console.log("✅ PDF generado exitosamente");
 }
 
 /*--------EVENT LISTENER PARA EL BOTÓN--------*/
@@ -426,13 +427,27 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
       
+      // Mostrar indicador de carga
+      const textoOriginal = botonPdf.textContent;
+      botonPdf.textContent = "Generando PDF...";
+      botonPdf.disabled = true;
+      botonPdf.style.cursor = "wait";
+      
       // Generar el PDF
       try {
         await createPDF();
-        alert("PDF generado exitosamente");
+        botonPdf.textContent = "✓ PDF generado";
+        setTimeout(() => {
+          botonPdf.textContent = textoOriginal;
+          botonPdf.disabled = false;
+          botonPdf.style.cursor = "pointer";
+        }, 2000);
       } catch (error) {
         console.error("Error generando PDF:", error);
         alert("Hubo un error al generar el PDF. Por favor, intente nuevamente.");
+        botonPdf.textContent = textoOriginal;
+        botonPdf.disabled = false;
+        botonPdf.style.cursor = "pointer";
       }
     });
   }

@@ -134,6 +134,7 @@ p {
   justify-content: center;
   margin: auto;
 }
+}
 .top-input {
   display: flex;
   flex-direction: row;
@@ -165,9 +166,18 @@ input[type="text"] {
   box-sizing: border-box;
 }
 
+/* Quitar el color azul del autofill */
+input[type="text"]:-webkit-autofill,
+input[type="text"]:-webkit-autofill:hover,
+input[type="text"]:-webkit-autofill:focus,
+input[type="text"]:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
 input[type="text"]:focus {
-  outline: 2px solid #343434;
-  outline-offset: 2px;
+  outline: none; /* Quitar el recuadro gris */
+  border-color: #343434; /* Solo cambiar el color del borde */
 }
 
 input[type="text"]::placeholder {
@@ -435,6 +445,62 @@ section{
   margin: auto;
 }
 
+/* SECCION TEJIDOS */
+.section-tejidos {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  margin: auto;
+}
+
+.section-tejidos .cojin-container {
+  width: 100%;
+}
+
+.section-tejidos .select-container {
+  width: 100%;
+}
+
+.section-tejidos #tejidos {
+  width: 100% !important;
+  max-width: 100%;
+  min-height: 45px;
+  height: auto;
+  font-size: 14px;
+  padding: 12px 40px 12px 15px;
+  border-radius: 0px;
+  border: #a5a5a5 1px solid;
+  cursor: pointer;
+  background-color: white;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
+}
+
+.section-tejidos #tejidos:focus {
+  outline: none;
+  border-color: #343434;
+}
+
+/* Estilos para opciones con precio */
+#tejidos option {
+  color: #000;
+  font-weight: normal;
+}
+
+/* El precio dentro de cada opción aparece en gris claro */
+/* Nota: Los navegadores no permiten estilar el texto dentro de las opciones,
+   pero el formato "NOMBRE    (precio€)" es estándar y funcional */
+
+
 /* SECCION CLIENTE */
 .section-cliente {
   padding-top: 2rem;
@@ -447,10 +513,20 @@ section{
   margin: auto;
 }
 
+/* Espacio solo en el form-inputs de la sección cliente */
+.section-cliente .form-inputs {
+  gap: 8px;
+}
+
+/* Espacio específico para el label dentro de la sección cliente */
+.section-cliente .input-title {
+  margin-bottom: 0; /* El gap ya maneja el espacio */
+}
+
 /* Botón Generar Presupuesto */
 .btn-generar {
   display: block;
-  margin: 15px auto;
+  margin: 30px auto 15px auto; /* Aumentado margen superior de 15px a 30px */
   padding: 1rem 1.5rem;
   font-weight: 500;
   width: 250px;
