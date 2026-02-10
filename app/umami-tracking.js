@@ -1,137 +1,104 @@
 // ============================================================================
-// TRACKING UMAMI - CONFIGURADOR SINGULAR (OPTIMIZADO)
+// TRACKING UMAMI - CONFIGURADOR SOFÁ (SIMPLE + COMPLEJO)
 // ============================================================================
 
-document.addEventListener('DOMContentLoaded', function() {
-  
-  // Selectores de elementos
-  const selectPiezas = Array.from({ length: 8 }, (_, i) => document.getElementById(`pieza${i+1}`));
+document.addEventListener('DOMContentLoaded', function () {
+
+  // --------------------------------------------------------------------------
+  // ELEMENTOS
+  // --------------------------------------------------------------------------
+  const selectPiezas = Array.from({ length: 8 }, (_, i) =>
+    document.getElementById(`pieza${i + 1}`)
+  );
+
   const selectTejido = document.getElementById('tejidos');
   const selectCojines = document.getElementById('cojines');
   const btnGenerarPdf = document.getElementById('generarPdfBtn');
   const inputNombreCliente = document.getElementById('nombreCliente');
 
-  // Verificar si Umami está disponible
+  // --------------------------------------------------------------------------
+  // UTILIDAD
+  // --------------------------------------------------------------------------
   function umamiDisponible() {
-    if (typeof umami !== 'object' || typeof umami.track !== 'function') {
-      console.warn('⚠️ Umami.track no está disponible');
-      return false;
-    }
-    return true;
+    return typeof umami === 'object' && typeof umami.track === 'function';
   }
 
-  // ============================================================================
-  // TRACK PIEZAS - Trackear cada pieza para análisis de popularidad
-  // ============================================================================
+  // --------------------------------------------------------------------------
+  // TRACK PIEZAS (EVENTOS SIMPLES)
+  // --------------------------------------------------------------------------
+  const estadoPiezas = {};
+
   selectPiezas.forEach((sel, index) => {
-    if (sel) {
-      sel.addEventListener('change', function() {
-        if (umamiDisponible() && this.value && this.value !== 'None') {
-          // Trackear qué pieza se seleccionó (útil para análisis de módulos populares)
-          umami.track(`PIEZA_${index + 1}_${String(this.value)}`);
-          console.log(`✅ Umami: Pieza ${index + 1} → ${this.value}`);
-        }
-      });
-    }
+    if (!sel) return;
+
+    const posicion = index + 1;
+
+    sel.addEventListener('change', function () {
+      if (!umamiDisponible()) return;
+
+      const valor = this.value;
+
+      if (!valor || valor === 'None') {
+        estadoPiezas[posicion] = 'None';
+        return;
+      }
+
+      if (estadoPiezas[posicion] === valor) return;
+      estadoPiezas[posicion] = valor;
+
+      const eventName = `PIEZA_${posicion}_${String(valor)}`;
+      umami.track(eventName);
+
+      console.log(`🧩 Umami → ${eventName}`);
+    });
   });
 
-  // ============================================================================
-  // TRACK TEJIDO - AQUÍ se trackea la configuración completa
-  // ============================================================================
+  // --------------------------------------------------------------------------
+  // TRACK TEJIDO (SIMPLE + CONFIG COMPLETA)
+  // --------------------------------------------------------------------------
   let ultimoTejido = '';
+
   if (selectTejido) {
-    selectTejido.addEventListener('change', function() {
-      if (umamiDisponible() && this.value && this.value !== 'None') {
-        
-        // Trackear tejido individual
-        if (this.value !== ultimoTejido) {
-          ultimoTejido = this.value;
-          umami.track(`TEJIDO_${String(this.value)}`);
-          console.log(`✅ Umami: Tejido → ${this.value}`);
-        }
-        
-        // TRACKEAR CONFIGURACIÓN COMPLETA (el usuario ya terminó de configurar)
-        trackConfiguracionCompleta();
+    selectTejido.addEventListener('change', function () {
+      if (!umamiDisponible()) return;
+
+      const tejido = this.value;
+      if (!tejido || tejido === 'None') return;
+
+      if (tejido !== ultimoTejido) {
+        ultimoTejido = tejido;
+
+        umami.track(`TEJIDO_${String(tejido)}`);
+        console.log(`🧵 Umami → TEJIDO_${tejido}`);
       }
+
+      // 👇 CLAVE: aquí se dispara CONFIG_COMPLETA (como antes)
+      trackConfiguracionCompleta();
     });
   }
 
-  // ============================================================================
-  // TRACK COJINES - Solo trackear cantidad
-  // ============================================================================
-  let ultimosCojines = 0;
+  // --------------------------------------------------------------------------
+  // TRACK COJINES (SIMPLE)
+  // --------------------------------------------------------------------------
+  let ultimosCojines = null;
+
   if (selectCojines) {
-    selectCojines.addEventListener('change', function() {
-      if (umamiDisponible()) {
-        const cantidad = Number(this.value);
-        if (cantidad > 0 && cantidad !== ultimosCojines) {
-          ultimosCojines = cantidad;
-          umami.track(`COJINES_${cantidad}`);
-          console.log(`✅ Umami: Cojines → ${cantidad}`);
-        }
-      }
+    selectCojines.addEventListener('change', function () {
+      if (!umamiDisponible()) return;
+
+      const cantidad = Number(this.value);
+      if (cantidad === ultimosCojines) return;
+
+      ultimosCojines = cantidad;
+
+      umami.track(`COJINES_${cantidad}`);
+      console.log(`🛋️ Umami → COJINES_${cantidad}`);
     });
   }
 
-  // ============================================================================
-  // TRACK GENERACIÓN DE PDF - El evento más importante
-  // ============================================================================
-  if (btnGenerarPdf) {
-    btnGenerarPdf.addEventListener('click', function() {
-      if (umamiDisponible()) {
-        const nombreCliente = inputNombreCliente?.value?.trim() || 'Sin_nombre';
-        const tejido = selectTejido?.value || 'None';
-        const piezas = obtenerPiezasSeleccionadas();
-        
-        // Solo trackear si cumple las validaciones
-        if (nombreCliente && tejido !== 'None' && piezas.length > 0) {
-          const precioTotal = calcularPrecioTotal();
-          
-          // Evento PDF generado con toda la info importante
-          umami.track('PDF_GENERADO', {
-            nombreCliente: String(nombreCliente),
-            numPiezas: Number(piezas.length),
-            piezas: piezas.map(p => p.id).join(', '),
-            tejido: String(tejido),
-            cojines: Number(selectCojines?.value || 0),
-            precioTotal: Number(precioTotal.toFixed(2))
-          });
-          
-          console.log('✅ Umami: PDF generado para', nombreCliente, '- Precio:', precioTotal.toFixed(2));
-        }
-      }
-    });
-  }
-
-  // ============================================================================
-  // CALCULAR PRECIO TOTAL (función auxiliar)
-  // ============================================================================
-  function calcularPrecioTotal() {
-    const piezasSeleccionadas = obtenerPiezasSeleccionadas();
-    const piezasFiltradas = piezasSeleccionadas.filter((pieza) => pieza.id !== "None");
-    
-    // Calcular precio de piezas
-    const precioPiezas = piezasFiltradas.reduce((total, pieza) => {
-      const precioPieza = obtenerPrecioPorMaterial(pieza.id, "SERIE 2");
-      return total + precioPieza;
-    }, 0);
-    
-    // Calcular precio de cojines
-    const cantidadCojines = parseInt(selectCojines?.value) || 0;
-    let precioCojines = 0;
-    if (cantidadCojines > 0) {
-      const tejidoSeleccionado = selectTejido?.value || "None";
-      const precioUnitarioCojin = preciosCojinesPorTejido[tejidoSeleccionado] || 0;
-      const multiplicador = obtenerMultiplicadorTarifa();
-      precioCojines = (precioUnitarioCojin * multiplicador) * cantidadCojines;
-    }
-    
-    return precioPiezas + precioCojines;
-  }
-
-  // ============================================================================
-  // TRACK CONFIGURACIÓN COMPLETA - Solo cuando selecciona tejido
-  // ============================================================================
+  // --------------------------------------------------------------------------
+  // CONFIG COMPLETA (EVENTO COMPLEJO)
+  // --------------------------------------------------------------------------
   let ultimaConfiguracion = '';
 
   function trackConfiguracionCompleta() {
@@ -139,50 +106,67 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const piezas = selectPiezas
       .map(sel => sel?.value)
-      .filter(val => val && val !== 'None');
-    
-    const tejidoSeleccionado = selectTejido?.value || '';
-    const cantidadCojines = parseInt(selectCojines?.value) || 0;
+      .filter(v => v && v !== 'None');
 
-    // SOLO trackear si hay piezas Y tejido seleccionado
-    if (piezas.length === 0 || !tejidoSeleccionado || tejidoSeleccionado === 'None') {
-      return;
-    }
+    const tejido = selectTejido?.value;
+    const cojines = Number(selectCojines?.value || 0);
+
+    if (piezas.length === 0 || !tejido || tejido === 'None') return;
 
     const precioTotal = calcularPrecioTotal();
 
-    // Construir identificador único de la configuración
-    const configId = `${piezas.length}_${tejidoSeleccionado}_${cantidadCojines}_${precioTotal.toFixed(0)}`;
+    const configId = `${piezas.join('|')}_${tejido}_${cojines}_${precioTotal.toFixed(0)}`;
 
-    // Evitar duplicados
-    if (configId === ultimaConfiguracion) {
-      console.log('⏭️ Umami: Configuración duplicada, no se trackea');
-      return;
-    }
+    if (configId === ultimaConfiguracion) return;
     ultimaConfiguracion = configId;
 
-    // Trackear configuración completa
-    const eventData = {
-      numPiezas: Number(piezas.length),
+    umami.track('CONFIG_COMPLETA', {
+      numPiezas: piezas.length,
       piezas: piezas.join(', '),
-      tejido: String(tejidoSeleccionado),
-      cojines: Number(cantidadCojines),
+      tejido,
+      cojines,
       precioTotal: Number(precioTotal.toFixed(2))
-    };
+    });
 
-    const nombreEvento = `CONFIG_COMPLETA_${piezas.length}pzs_${tejidoSeleccionado}_${precioTotal.toFixed(0)}€`;
-
-    console.log('✅ Umami: Configuración completa (usuario terminó)', eventData);
-    umami.track(nombreEvento, eventData);
+    console.log('✅ Umami → CONFIG_COMPLETA');
   }
 
-  // ============================================================================
-  // TRACK VISITA INICIAL
-  // ============================================================================
+  // --------------------------------------------------------------------------
+  // PDF GENERADO (EVENTO COMPLEJO)
+  // --------------------------------------------------------------------------
+  if (btnGenerarPdf) {
+    btnGenerarPdf.addEventListener('click', function () {
+      if (!umamiDisponible()) return;
+
+      const nombreCliente = inputNombreCliente?.value?.trim() || 'Sin_nombre';
+      const tejido = selectTejido?.value || 'None';
+      const piezas = selectPiezas
+        .map(sel => sel?.value)
+        .filter(v => v && v !== 'None');
+
+      if (piezas.length === 0 || tejido === 'None') return;
+
+      const precioTotal = calcularPrecioTotal();
+
+      umami.track('PDF_GENERADO', {
+        nombreCliente,
+        numPiezas: piezas.length,
+        piezas: piezas.join(', '),
+        tejido,
+        cojines: Number(selectCojines?.value || 0),
+        precioTotal: Number(precioTotal.toFixed(2))
+      });
+
+      console.log('📄 Umami → PDF_GENERADO');
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // VISITA
+  // --------------------------------------------------------------------------
   if (umamiDisponible()) {
     umami.track('VISITA_CONFIGURADOR');
-    console.log('✅ Umami: Visita al configurador registrada');
   }
 
-  console.log('🎯 Umami Tracking inicializado correctamente (modo optimizado)');
+  console.log('🎯 Umami tracking OK (simple + complejo)');
 });
