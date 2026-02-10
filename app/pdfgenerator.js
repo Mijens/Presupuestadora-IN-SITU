@@ -235,7 +235,7 @@ async function captureAndEmbedImage(pdfDoc, page, selector, x, y, maxWidth, maxH
     
     // Detectar móvil y aplicar escala adicional
     const isMobile = window.innerWidth <= 768;
-    const mobileScale = isMobile ? 0.75 : 1; // Reducir al 75% en móvil
+    const mobileScale = isMobile ? 0.85 : 1; // Reducir al 85% en móvil
     
     const scaleX = maxWidth / imgWidth;
     const scaleY = maxHeight / imgHeight;
