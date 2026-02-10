@@ -21,12 +21,16 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ============================================================================
-  // TRACK PIEZAS - NO trackear individualmente
+  // TRACK PIEZAS - Trackear cada pieza para análisis de popularidad
   // ============================================================================
   selectPiezas.forEach((sel, index) => {
     if (sel) {
       sel.addEventListener('change', function() {
-        // No hace nada - solo esperar a que seleccione tejido
+        if (umamiDisponible() && this.value && this.value !== 'None') {
+          // Trackear qué pieza se seleccionó (útil para análisis de módulos populares)
+          umami.track(`PIEZA_${index + 1}_${String(this.value)}`);
+          console.log(`✅ Umami: Pieza ${index + 1} → ${this.value}`);
+        }
       });
     }
   });
