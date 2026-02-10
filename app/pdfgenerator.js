@@ -332,7 +332,7 @@ async function createPDF() {
     const logoHeight = (logoImage.height / logoImage.width) * logoWidth;
     
     page.drawImage(logoImage, {
-      x: pageWidth - logoWidth - 50,
+      x: pageWidth - logoWidth - 40,
       y: 778, // Alineado con PRESUPUESTO
       width: logoWidth,
       height: logoHeight
@@ -474,14 +474,15 @@ async function createPDF() {
 
   // PRECIO TOTAL con +IVA y nota de portes
   drawText("*Portes no incluidos", 70, yPosition, 8, helveticaFont, colorGris);
-  drawText("TOTAL", 420, yPosition, 10, helveticaBoldFont);
+  drawText("*Color de tejido a definir con representante", 70, yPosition - 12, 8, helveticaFont, colorGris);
+  drawText("TOTAL", 415, yPosition, 10, helveticaBoldFont);
   drawText(`${precioTotal.toFixed(2)}€ +IVA`, 455, yPosition, 10, helveticaFont);
 
   // ============================================
   // CONDICIONES (PIE DE PÁGINA - bajado para evitar solapamiento)
   // ============================================
   const condicionesY = 50;
-  const condicionesTexto = "*Presupuesto con validez de 60 días desde la fecha de emisión. Los plazos de entrega pueden variar según disponibilidad de tejidos. El valor no incluye portes. La fecha de emisión define la validez del presupuesto; el Nº de referencia permite localizarlo. Para más información consultar enviando un correo a hola@in-situ.io o en www.in-situ.io";
+  const condicionesTexto = "*Presupuesto con validez de 60 días desde la fecha de emisión. Los plazos de entrega pueden variar según disponibilidad de tejidos. El valor no incluye portes. La fecha de emisión define la validez del presupuesto; el Nº de referencia permite localizarlo. Para más información consultar enviando un correo a hola@in-situ.io Para más información sobre el tejido seleccionado descargue las fichas técnicas desde nuestra web www.in-situ.io/tejidos";
   
   // Dividir el texto en líneas
   const maxWidth = 495;
