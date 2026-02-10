@@ -302,6 +302,7 @@ function generarResumen() {
     }
     ${lineasCojines}
     <li class="precioResumen inter-resumen">Precio Total: <span id="precioTotal"> &nbsp ${precioTotal.toFixed(2)}€ +IVA</span></li>
+    <li class="itemsResumen inter-resumen" style="margin-top: 8px; color: #666;">*Portes no incluidos</li>
   `;
 
   actualizarPreciosEnDropdown();

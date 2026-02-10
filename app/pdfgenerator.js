@@ -484,15 +484,16 @@ async function createPDF() {
   
   yPosition -= 20;
 
-  // PRECIO TOTAL con +IVA
+  // PRECIO TOTAL con +IVA y nota de portes
+  drawText("*Portes no incluidos", 70, yPosition, 8, helveticaFont, colorGris);
   drawText("TOTAL", 420, yPosition, 10, helveticaBoldFont);
-  drawText(`${precioTotal.toFixed(2)}€ +IVA`, 455, yPosition, 10, helveticaFont); // Cambiado a helveticaFont (sin bold)
+  drawText(`${precioTotal.toFixed(2)}€ +IVA`, 455, yPosition, 10, helveticaFont);
 
   // ============================================
   // CONDICIONES (PIE DE PÁGINA - bajado para evitar solapamiento)
   // ============================================
-  const condicionesY = 50; // Bajado de 70 a 50 - dos líneas más abajo
-  const condicionesTexto = "* Presupuesto con validez de 90 días desde la fecha de emisión. Los plazos de entrega pueden variar según disponibilidad de tejidos y componentes. Para importes < 300€ + IVA (pufs, metrajes, etc.) se aplican 12€ de portes; a partir de 300€ los portes son gratuitos. La fecha de emisión define la validez del presupuesto; el Nº de referencia permite localizarlo. Más información y condiciones completas en la web.";
+  const condicionesY = 50;
+  const condicionesTexto = "*Presupuesto con validez de 60 días desde la fecha de emisión. Los plazos de entrega pueden variar según disponibilidad de tejidos. El valor no incluye portes. La fecha de emisión define la validez del presupuesto; el Nº de referencia permite localizarlo. Para más información consultar enviando un correo a hola@in-situ.io o en www.in-situ.io";
   
   // Dividir el texto en líneas
   const maxWidth = 495;
@@ -549,6 +550,13 @@ document.addEventListener("DOMContentLoaded", function () {
       // Validar que el nombre esté ingresado
       if (!nombreCliente) {
         alert("Por favor, ingrese el nombre del cliente");
+        return;
+      }
+      
+      // Validar que haya un tejido seleccionado
+      const tejidoSeleccionado = document.getElementById("tejidos").value;
+      if (!tejidoSeleccionado || tejidoSeleccionado === 'None' || tejidoSeleccionado === '') {
+        alert("Por favor, seleccione un tejido/colección antes de generar el presupuesto");
         return;
       }
       
