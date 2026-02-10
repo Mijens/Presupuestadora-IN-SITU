@@ -1,5 +1,5 @@
 // ============================================================================
-// TRACKING UMAMI - CONFIGURADOR SINGULAR
+// TRACKING UMAMI - CONFIGURADOR SINGULAR (OPTIMIZADO)
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -21,63 +21,56 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ============================================================================
-  // TRACK PIEZAS (Módulos seleccionados)
+  // TRACK PIEZAS - NO trackear individualmente
   // ============================================================================
   selectPiezas.forEach((sel, index) => {
     if (sel) {
       sel.addEventListener('change', function() {
-        if (umamiDisponible() && this.value && this.value !== 'None') {
-          umami.track(`PIEZA_${index + 1}_${String(this.value)}`);
-          console.log(`✅ Umami: Pieza ${index + 1} → ${this.value}`);
-          
-          // Trackear configuración completa después de un momento
-          setTimeout(trackConfiguracionCompleta, 800);
-        }
+        // No hace nada - solo esperar a que seleccione tejido
       });
     }
   });
 
   // ============================================================================
-  // TRACK TEJIDO
+  // TRACK TEJIDO - AQUÍ se trackea la configuración completa
   // ============================================================================
+  let ultimoTejido = '';
   if (selectTejido) {
     selectTejido.addEventListener('change', function() {
-      if (umamiDisponible() && this.value) {
-        umami.track(`TEJIDO_${String(this.value)}`);
-        console.log(`✅ Umami: Tejido → ${this.value}`);
+      if (umamiDisponible() && this.value && this.value !== 'None') {
         
-        // Si hay tejido seleccionado, trackear precio
-        if (this.value !== 'None') {
-          const piezasSeleccionadas = obtenerPiezasSeleccionadas();
-          if (piezasSeleccionadas.length > 0) {
-            const precioTotal = calcularPrecioTotal();
-            umami.track(`PRECIO_TOTAL_${Number(precioTotal.toFixed(2))}`);
-            console.log(`✅ Umami: Precio total → ${precioTotal.toFixed(2)}€`);
-          }
+        // Trackear tejido individual
+        if (this.value !== ultimoTejido) {
+          ultimoTejido = this.value;
+          umami.track(`TEJIDO_${String(this.value)}`);
+          console.log(`✅ Umami: Tejido → ${this.value}`);
         }
         
-        setTimeout(trackConfiguracionCompleta, 800);
+        // TRACKEAR CONFIGURACIÓN COMPLETA (el usuario ya terminó de configurar)
+        trackConfiguracionCompleta();
       }
     });
   }
 
   // ============================================================================
-  // TRACK COJINES
+  // TRACK COJINES - Solo trackear cantidad
   // ============================================================================
+  let ultimosCojines = 0;
   if (selectCojines) {
     selectCojines.addEventListener('change', function() {
       if (umamiDisponible()) {
         const cantidad = Number(this.value);
-        umami.track(`COJINES_${cantidad}`);
-        console.log(`✅ Umami: Cojines → ${cantidad}`);
-        
-        setTimeout(trackConfiguracionCompleta, 800);
+        if (cantidad > 0 && cantidad !== ultimosCojines) {
+          ultimosCojines = cantidad;
+          umami.track(`COJINES_${cantidad}`);
+          console.log(`✅ Umami: Cojines → ${cantidad}`);
+        }
       }
     });
   }
 
   // ============================================================================
-  // TRACK GENERACIÓN DE PDF
+  // TRACK GENERACIÓN DE PDF - El evento más importante
   // ============================================================================
   if (btnGenerarPdf) {
     btnGenerarPdf.addEventListener('click', function() {
@@ -88,16 +81,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Solo trackear si cumple las validaciones
         if (nombreCliente && tejido !== 'None' && piezas.length > 0) {
-          // Trackear PDF generado con nombre de cliente
-          umami.track('PDF_GENERADO', {
-            nombreCliente: String(nombreCliente)
-          });
-          console.log('✅ Umami: PDF generado para', nombreCliente);
+          const precioTotal = calcularPrecioTotal();
           
-          // Trackear configuración final con la que se generó el PDF
-          setTimeout(() => {
-            trackConfiguracionCompleta(true, nombreCliente);
-          }, 500);
+          // Evento PDF generado con toda la info importante
+          umami.track('PDF_GENERADO', {
+            nombreCliente: String(nombreCliente),
+            numPiezas: Number(piezas.length),
+            piezas: piezas.map(p => p.id).join(', '),
+            tejido: String(tejido),
+            cojines: Number(selectCojines?.value || 0),
+            precioTotal: Number(precioTotal.toFixed(2))
+          });
+          
+          console.log('✅ Umami: PDF generado para', nombreCliente, '- Precio:', precioTotal.toFixed(2));
         }
       }
     });
@@ -130,11 +126,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ============================================================================
-  // TRACK CONFIGURACIÓN COMPLETA
+  // TRACK CONFIGURACIÓN COMPLETA - Solo cuando selecciona tejido
   // ============================================================================
   let ultimaConfiguracion = '';
 
-  function trackConfiguracionCompleta(esPDF = false, nombreCliente = null) {
+  function trackConfiguracionCompleta() {
     if (!umamiDisponible()) return;
 
     const piezas = selectPiezas
@@ -144,37 +140,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const tejidoSeleccionado = selectTejido?.value || '';
     const cantidadCojines = parseInt(selectCojines?.value) || 0;
 
-    // Solo trackear si hay al menos una pieza seleccionada
-    if (piezas.length === 0) return;
+    // SOLO trackear si hay piezas Y tejido seleccionado
+    if (piezas.length === 0 || !tejidoSeleccionado || tejidoSeleccionado === 'None') {
+      return;
+    }
 
     const precioTotal = calcularPrecioTotal();
 
-    // Construir nombre del evento
-    const partes = [`Piezas_${piezas.length}`];
-    
-    if (tejidoSeleccionado && tejidoSeleccionado !== 'None') {
-      partes.push(`Tejido_${tejidoSeleccionado}`);
-    }
-    
-    if (cantidadCojines > 0) {
-      partes.push(`Cojines_${cantidadCojines}`);
-    }
-    
-    if (precioTotal > 0) {
-      partes.push(`Precio_${precioTotal.toFixed(0)}`);
-    }
+    // Construir identificador único de la configuración
+    const configId = `${piezas.length}_${tejidoSeleccionado}_${cantidadCojines}_${precioTotal.toFixed(0)}`;
 
-    const prefijo = esPDF ? 'PDF_CONFIG' : 'CONFIG_COMPLETA';
-    const nombreEvento = `${prefijo}_${partes.join('_')}`;
-
-    // Evitar duplicados (excepto si es PDF)
-    if (!esPDF && nombreEvento === ultimaConfiguracion) {
+    // Evitar duplicados
+    if (configId === ultimaConfiguracion) {
       console.log('⏭️ Umami: Configuración duplicada, no se trackea');
       return;
     }
-    ultimaConfiguracion = nombreEvento;
+    ultimaConfiguracion = configId;
 
-    // Preparar datos del evento
+    // Trackear configuración completa
     const eventData = {
       numPiezas: Number(piezas.length),
       piezas: piezas.join(', '),
@@ -183,13 +166,9 @@ document.addEventListener('DOMContentLoaded', function() {
       precioTotal: Number(precioTotal.toFixed(2))
     };
 
-    // Agregar nombre de cliente solo si se proporciona (al generar PDF)
-    if (nombreCliente) {
-      eventData.nombreCliente = String(nombreCliente);
-    }
+    const nombreEvento = `CONFIG_COMPLETA_${piezas.length}pzs_${tejidoSeleccionado}_${precioTotal.toFixed(0)}€`;
 
-    console.log('✅ Umami: Configuración completa', eventData);
-
+    console.log('✅ Umami: Configuración completa (usuario terminó)', eventData);
     umami.track(nombreEvento, eventData);
   }
 
@@ -201,5 +180,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Umami: Visita al configurador registrada');
   }
 
-  console.log('🎯 Umami Tracking inicializado correctamente');
+  console.log('🎯 Umami Tracking inicializado correctamente (modo optimizado)');
 });
