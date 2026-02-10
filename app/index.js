@@ -22,7 +22,7 @@ const preciosCojinesPorTejido = {
   "GRANIT": 98,
   "DUO": 70,
   "SUBLIM": 70,
-  "None": 70 // Precio genérico si no hay tejido
+  "None": 0 // PRECIO 0 SI NO HAY TEJIDO
 };
 
 /*--------------PRECIOS BASE DE MÓDULOS (SIN TEJIDO)-----------------*/
@@ -44,7 +44,7 @@ const incrementosPorTejido = {
   "MOULIN": 62.00,
   "SALVIA": 56.62,
   "SUBLIM": 48.56,
-  "None": 60.00 // Incremento genérico si no hay tejido seleccionado
+  "None": 0 // INCREMENTO 0 SI NO HAY TEJIDO
 };
 
 /*--------------INCREMENTOS POR TEJIDO PARA MODR (RINCÓN)-----------------*/
@@ -57,7 +57,7 @@ const incrementosPorTejidoMODR = {
   "MOULIN": 83.35,
   "SALVIA": 78.86,
   "SUBLIM": 67.63,
-  "None": 80.00 // Incremento genérico para MODR si no hay tejido
+  "None": 0 // INCREMENTO 0 PARA MODR SI NO HAY TEJIDO
 };
 
 /*--------------MULTIPLICADOR DE TARIFA-----------------*/
@@ -117,18 +117,23 @@ function obtenerPiezasPorSlot() {
 
 /*---PRECIOS DE LAS PIEZAS SEGUN MODELOS----*/
 function obtenerPrecioPorMaterial(idPieza, tela) {
-  // Obtener precio base del módulo
-  const precioBase = preciosBaseModulos[idPieza] || 0;
-  
   // Obtener tejido seleccionado
   const tejidoSeleccionado = document.getElementById("tejidos")?.value || "None";
+  
+  // Si no hay tejido seleccionado, retornar 0
+  if (tejidoSeleccionado === "None") {
+    return 0;
+  }
+  
+  // Obtener precio base del módulo
+  const precioBase = preciosBaseModulos[idPieza] || 0;
   
   // Obtener incremento por tejido (usar tabla específica para MODR)
   let incrementoTejido;
   if (idPieza === "MODR") {
-    incrementoTejido = incrementosPorTejidoMODR[tejidoSeleccionado] || incrementosPorTejidoMODR["None"];
+    incrementoTejido = incrementosPorTejidoMODR[tejidoSeleccionado] || 0;
   } else {
-    incrementoTejido = incrementosPorTejido[tejidoSeleccionado] || incrementosPorTejido["None"];
+    incrementoTejido = incrementosPorTejido[tejidoSeleccionado] || 0;
   }
   
   // Aplicar multiplicador de margen de ganancia (2.3) al total (base + tejido)
@@ -184,9 +189,9 @@ function actualizarPreciosEnTejidos() {
   for (let i = 0; i < opciones.length; i++) {
     const tejido = opciones[i].value;
     
-    // No agregar precio a "Sin tejido seleccionado"
+    // Mantener texto original para "Sin tejido seleccionado"
     if (tejido === "None") {
-      opciones[i].text = "Sin tejido seleccionado";
+      opciones[i].text = "SIN TEJIDO SELECCIONADO";
       continue;
     }
     
@@ -200,9 +205,9 @@ function actualizarPreciosEnTejidos() {
       // Usar tabla de incrementos específica para MODR
       let incrementoTejido;
       if (pieza.id === "MODR") {
-        incrementoTejido = incrementosPorTejidoMODR[tejido] || incrementosPorTejidoMODR["None"];
+        incrementoTejido = incrementosPorTejidoMODR[tejido] || 0;
       } else {
-        incrementoTejido = incrementosPorTejido[tejido] || incrementosPorTejido["None"];
+        incrementoTejido = incrementosPorTejido[tejido] || 0;
       }
       
       const precioConMargen = (precioBase + incrementoTejido) * 2.3; // Multiplicador 2.3
@@ -215,7 +220,7 @@ function actualizarPreciosEnTejidos() {
     
     // Precio de cojines con este tejido
     if (cantidadCojines > 0) {
-      const precioCojin = preciosCojinesPorTejido[tejido] || preciosCojinesPorTejido["None"];
+      const precioCojin = preciosCojinesPorTejido[tejido] || 0;
       const multiplicador = obtenerMultiplicadorTarifa();
       precioTotalTejido += (precioCojin * multiplicador) * cantidadCojines;
     }
@@ -245,19 +250,39 @@ function actualizarPreciosEnDropdown() {
   }
 }
 
+/*---VERIFICAR SI PUEDE GENERAR PDF---*/
+function verificarEstadoPDF() {
+  const tejidoSeleccionado = document.getElementById("tejidos")?.value;
+  const generarPdfBtn = document.getElementById("generarPdfBtn");
+  const piezasSeleccionadas = obtenerPiezasSeleccionadas();
+  
+  if (generarPdfBtn) {
+    // Deshabilitar si no hay tejido o no hay piezas
+    if (tejidoSeleccionado === "None" || piezasSeleccionadas.length === 0) {
+      generarPdfBtn.disabled = true;
+      generarPdfBtn.style.opacity = "0.5";
+      generarPdfBtn.style.cursor = "not-allowed";
+      generarPdfBtn.title = "Debe seleccionar un tejido y al menos una pieza";
+    } else {
+      generarPdfBtn.disabled = false;
+      generarPdfBtn.style.opacity = "1";
+      generarPdfBtn.style.cursor = "pointer";
+      generarPdfBtn.title = "";
+    }
+  }
+}
+
 /*---GENERAR RESUMEN SOLO PIEZAS Y COJINES---*/
 function generarResumen() {
   const piezasSeleccionadas = obtenerPiezasSeleccionadas();
-
   const piezasFiltradas = piezasSeleccionadas.filter((pieza) => pieza.id !== "None");
-
   const cantidadCojines = parseInt(document.getElementById("cojines").value) || 0;
   
   // Obtener tejido seleccionado
   const tejidoSeleccionado = document.getElementById("tejidos").value;
 
   const precioPiezas = piezasFiltradas.reduce((total, pieza) => {
-    const precioPieza = obtenerPrecioPorMaterial(pieza.id, "SERIE 2"); // Puedes ajustar la serie por defecto
+    const precioPieza = obtenerPrecioPorMaterial(pieza.id, "SERIE 2");
     return total + precioPieza;
   }, 0);
 
@@ -265,7 +290,7 @@ function generarResumen() {
   let precioUnitarioCojin = 0;
   if (cantidadCojines > 0) {
     // Usar precio del cojín según tejido seleccionado
-    precioUnitarioCojin = preciosCojinesPorTejido[tejidoSeleccionado] || preciosCojinesPorTejido["None"];
+    precioUnitarioCojin = preciosCojinesPorTejido[tejidoSeleccionado] || 0;
     const multiplicador = obtenerMultiplicadorTarifa();
     precioUnitarioCojin = precioUnitarioCojin * multiplicador;
     precioCojines = precioUnitarioCojin * cantidadCojines;
@@ -277,12 +302,18 @@ function generarResumen() {
   let lineaTejido = '';
   if (tejidoSeleccionado && tejidoSeleccionado !== 'None') {
     lineaTejido = `<li class="inter-resumen">Tejido seleccionado: TEJIDO ${tejidoSeleccionado}</li>`;
+  } else {
+    lineaTejido = `<li class="inter-resumen" style="color: #e74c3c; font-weight: 600;">⚠️ DEBE SELECCIONAR UN TEJIDO</li>`;
   }
 
   // Generar línea de cojines con cantidad
   let lineasCojines = '';
   if (cantidadCojines > 0) {
-    lineasCojines = `<li class="itemsResumen inter-resumen">COJÍN DE ADORNO 45X45 CM &nbsp <span id="precioCojines">${precioUnitarioCojin.toFixed(2)}€ X${cantidadCojines}</span></li>`;
+    if (tejidoSeleccionado !== 'None') {
+      lineasCojines = `<li class="itemsResumen inter-resumen">COJÍN DE ADORNO 45X45 CM &nbsp <span id="precioCojines">${precioUnitarioCojin.toFixed(2)}€ X${cantidadCojines}</span></li>`;
+    } else {
+      lineasCojines = `<li class="itemsResumen inter-resumen">COJÍN DE ADORNO 45X45 CM &nbsp <span id="precioCojines">0.00€ X${cantidadCojines}</span></li>`;
+    }
   }
 
   const resumenElement = document.getElementById("resumen");
@@ -306,7 +337,8 @@ function generarResumen() {
   `;
 
   actualizarPreciosEnDropdown();
-  actualizarPreciosEnTejidos(); // Actualizar precios en dropdown de tejidos
+  actualizarPreciosEnTejidos();
+  verificarEstadoPDF(); // Verificar estado del botón PDF
 }
 
 // ===============================================================================
@@ -351,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar resumen y precios
   generarResumen();
   actualizarPreciosEnDropdown();
-  actualizarPreciosEnTejidos(); // Inicializar precios en tejidos
+  actualizarPreciosEnTejidos();
 
   console.log('🎯 Sistema inicializado: Configurador solo Piezas + Cojines');
 
