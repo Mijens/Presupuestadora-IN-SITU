@@ -14,6 +14,7 @@ const cojines = [
 
 /*--------------PRECIOS DE COJINES POR TEJIDO-----------------*/
 const preciosCojinesPorTejido = {
+  // INDOOR
   "CLUB": 84,
   "DROM": 84,
   "GRES": 84,
@@ -22,8 +23,18 @@ const preciosCojinesPorTejido = {
   "GRANIT": 98,
   "DUO": 70,
   "SUBLIM": 70,
-  "None": 0 // PRECIO 0 SI NO HAY TEJIDO
+  // OUTDOOR
+  "ALBA (IMP)": 98,
+  "BRISA (IMP)": 98,
+  "CORDA (IMP)": 119,
+  "FIJI (IMP)": 98,
+  "SALINA (IMP)": 112,
+  "SAULÓ (IMP)": 112,
+  "None": 0
 };
+
+/*--------------TEJIDOS IMPERMEABLES (OUTDOOR)-----------------*/
+const tejidosIMP = new Set(["ALBA (IMP)", "BRISA (IMP)", "CORDA (IMP)", "FIJI (IMP)", "SALINA (IMP)", "SAULÓ (IMP)"]);
 
 /*--------------PRECIOS BASE DE MÓDULOS (SIN TEJIDO)-----------------*/
 const preciosBaseModulos = {
@@ -34,8 +45,15 @@ const preciosBaseModulos = {
   "MODR": 180.00 // Precio base del rincón
 };
 
+/*--------------OBTENER PRECIO BASE (CON +5% PARA OUTDOOR)-----------------*/
+function getPrecioBase(idPieza, tejido) {
+  const base = preciosBaseModulos[idPieza] || 0;
+  return tejidosIMP.has(tejido) ? base * 1.05 : base;
+}
+
 /*--------------INCREMENTOS POR TEJIDO PARA MÓDULOS NORMALES-----------------*/
 const incrementosPorTejido = {
+  // INDOOR
   "CLUB": 66.20,
   "DROM": 59.48,
   "DUO": 44.19,
@@ -44,11 +62,19 @@ const incrementosPorTejido = {
   "MOULIN": 62.00,
   "SALVIA": 56.62,
   "SUBLIM": 48.56,
-  "None": 0 // INCREMENTO 0 SI NO HAY TEJIDO
+  // OUTDOOR
+  "ALBA (IMP)": 69.72,
+  "BRISA (IMP)": 69.72,
+  "CORDA (IMP)": 106.12,
+  "FIJI (IMP)": 77.82,
+  "SALINA (IMP)": 88.37,
+  "SAULÓ (IMP)": 79.80,
+  "None": 0
 };
 
 /*--------------INCREMENTOS POR TEJIDO PARA MODR (RINCÓN)-----------------*/
 const incrementosPorTejidoMODR = {
+  // INDOOR
   "CLUB": 92.20,
   "DROM": 82.84,
   "DUO": 61.55,
@@ -57,7 +83,14 @@ const incrementosPorTejidoMODR = {
   "MOULIN": 83.35,
   "SALVIA": 78.86,
   "SUBLIM": 67.63,
-  "None": 0 // INCREMENTO 0 PARA MODR SI NO HAY TEJIDO
+  // OUTDOOR
+  "ALBA (IMP)": 97.12,
+  "BRISA (IMP)": 97.12,
+  "CORDA (IMP)": 147.81,
+  "FIJI (IMP)": 108.39,
+  "SALINA (IMP)": 123.10,
+  "SAULÓ (IMP)": 111.15,
+  "None": 0
 };
 
 /*--------------MULTIPLICADOR DE TARIFA-----------------*/
@@ -125,8 +158,8 @@ function obtenerPrecioPorMaterial(idPieza, tela) {
     return 0;
   }
   
-  // Obtener precio base del módulo
-  const precioBase = preciosBaseModulos[idPieza] || 0;
+  // Obtener precio base del módulo (con +5% si es tejido IMP)
+  const precioBase = getPrecioBase(idPieza, tejidoSeleccionado);
   
   // Obtener incremento por tejido (usar tabla específica para MODR)
   let incrementoTejido;
@@ -189,9 +222,9 @@ function actualizarPreciosEnTejidos() {
   for (let i = 0; i < opciones.length; i++) {
     const tejido = opciones[i].value;
     
-    // Mantener texto original para "Sin tejido seleccionado"
-    if (tejido === "None") {
-      opciones[i].text = "SIN TEJIDO SELECCIONADO";
+    // Saltar opciones vacías (labels de optgroup) y "Sin tejido"
+    if (!tejido || tejido === "" || tejido === "None") {
+      if (tejido === "None") opciones[i].text = "SIN TEJIDO SELECCIONADO";
       continue;
     }
     
@@ -200,7 +233,7 @@ function actualizarPreciosEnTejidos() {
     
     // Precio de piezas con este tejido
     piezasFiltradas.forEach((pieza) => {
-      const precioBase = preciosBaseModulos[pieza.id] || 0;
+      const precioBase = getPrecioBase(pieza.id, tejido);
       
       // Usar tabla de incrementos específica para MODR
       let incrementoTejido;

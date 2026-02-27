@@ -23,32 +23,14 @@
         <a class="seccion-titulo Montserrat-mid-titulos"> Piezas</a>
         <label for="pieza" class="input-title Montserrat-subtitulos">Selecciona las piezas para la configuración*</label>
 
-        <!-- Selección de piezas: MODULOS y RINCÓN -->
-        <select name="pieza" id="pieza1" class="dropdown">
-            <!-- Se llena con JS -->
-        </select>
-        <select name="pieza" id="pieza2" class="dropdown">
-            <!-- Se llena con JS -->
-        </select>
-        <select name="pieza" id="pieza3" class="dropdown">
-            <!-- Se llena con JS -->
-        </select>
-        <select name="pieza" id="pieza4" class="dropdown hidden">
-            <!-- Se llena con JS -->
-        </select>
-        <!-- Los selects ocultos inicialmente (5-8) -->
-        <select name="pieza" id="pieza5" class="dropdown hidden">
-            <!-- Se llena con JS -->
-        </select>
-        <select name="pieza" id="pieza6" class="dropdown hidden">
-            <!-- Se llena con JS -->
-        </select>
-        <select name="pieza" id="pieza7" class="dropdown hidden">
-            <!-- Se llena con JS -->
-        </select>
-        <select name="pieza" id="pieza8" class="dropdown hidden">
-            <!-- Se llena con JS -->
-        </select>
+        <select name="pieza" id="pieza1" class="dropdown"></select>
+        <select name="pieza" id="pieza2" class="dropdown"></select>
+        <select name="pieza" id="pieza3" class="dropdown"></select>
+        <select name="pieza" id="pieza4" class="dropdown hidden"></select>
+        <select name="pieza" id="pieza5" class="dropdown hidden"></select>
+        <select name="pieza" id="pieza6" class="dropdown hidden"></select>
+        <select name="pieza" id="pieza7" class="dropdown hidden"></select>
+        <select name="pieza" id="pieza8" class="dropdown hidden"></select>
 
         <button id="showPiezas" class="btn-agregar Montserrat-subtitulos">Agregar más</button>
     </div>
@@ -71,15 +53,15 @@
             <label class="input-title Montserrat-subtitulos">Seleccione cantidad</label>
             <p class="cojin-descripcion Montserrat-subtitulos" translate="no">Cojín Cuadrado 45x45 cms</p>
             <select name="Seleccione cantidades" id="cojines" class="dropdown">
-                <option value="0" class="cojinesopt">0</option>
-                <option value="1" class="cojinesopt">1</option>
-                <option value="2" class="cojinesopt">2</option>
-                <option value="3" class="cojinesopt">3</option>
-                <option value="4" class="cojinesopt">4</option>
-                <option value="5" class="cojinesopt">5</option>
-                <option value="6" class="cojinesopt">6</option>
-                <option value="7" class="cojinesopt">7</option>
-                <option value="8" class="cojinesopt">8</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
             </select>
         </div>
     </div>
@@ -94,14 +76,24 @@
             <div class="select-container">
                 <select name="Seleccione tejido" id="tejidos" class="dropdown">
                     <option value="None">SIN TEJIDO SELECCIONADO</option>
-                    <option value="CLUB">CLUB</option>
-                    <option value="DROM">DROM</option>
-                    <option value="DUO">DUO</option>
-                    <option value="GRANIT">GRANIT</option>
-                    <option value="GRES">GRES</option>
-                    <option value="MOULIN">MOULIN</option>
-                    <option value="SALVIA">SALVIA</option>
-                    <option value="SUBLIM">SUBLIM</option>
+                    <optgroup label="INDOOR">
+                        <option value="CLUB">CLUB</option>
+                        <option value="DROM">DROM</option>
+                        <option value="DUO">DUO</option>
+                        <option value="GRANIT">GRANIT</option>
+                        <option value="GRES">GRES</option>
+                        <option value="MOULIN">MOULIN</option>
+                        <option value="SALVIA">SALVIA</option>
+                        <option value="SUBLIM">SUBLIM</option>
+                    </optgroup>
+                    <optgroup label="OUTDOOR">
+                        <option value="ALBA (IMP)">ALBA (IMP)</option>
+                        <option value="BRISA (IMP)">BRISA (IMP)</option>
+                        <option value="CORDA (IMP)">CORDA (IMP)</option>
+                        <option value="FIJI (IMP)">FIJI (IMP)</option>
+                        <option value="SALINA (IMP)">SALINA (IMP)</option>
+                        <option value="SAULÓ (IMP)">SAULÓ (IMP)</option>
+                    </optgroup>
                 </select>
             </div>
         </div>
@@ -121,7 +113,6 @@
         <label for="nombreCliente" class="input-title Montserrat-subtitulos">Nombre del cliente*</label>
         <input type="text" id="nombreCliente" name="nombreCliente" class="dropdown" required placeholder="Ingrese el nombre del cliente">
     </div>
-    
     <button class="btn-generar Montserrat-subtitulos" id="generarPdfBtn">Generar presupuesto</button>
 </section>
 
@@ -151,8 +142,6 @@
 <script defer src="./app/data/imgtelas.js"></script>
 <script defer src="./app/switchs/switchs.js"></script>
 <script defer src="./app/piezasconfiguracion.js"></script>
-
-<!-- Al final de index.html, después de todos los otros scripts -->
 <script defer src="./app/umami-tracking.js"></script>
 </body>
 </html>
